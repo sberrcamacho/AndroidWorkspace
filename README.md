@@ -30,6 +30,6 @@ Una app sencilla que muestra un mensaje de cumpleaños con imagen y estilos.
 ## ▶️ Cómo Ejecutarlo
 
 1. Abre Android Studio  
-2. Ve a **File → Open** y selecciona `06_android_studio`  
+2. Ve a **File → Open** y selecciona `AndroidWorkspace`  
 3. Espera a que Gradle sincronice  
 4. Ejecuta cualquiera de los módulos desde el selector de dispositivos
