@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme
+package com.example.composearticle.ui.theme
 
 import android.os.Build
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +32,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun GreetingCardTheme(
+fun ComposeArticleTheme(
     darkTheme: Boolean = false,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
