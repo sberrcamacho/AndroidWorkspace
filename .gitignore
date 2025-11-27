@@ -1,0 +1,31 @@
+# Gradle files
+.gradle/
+build/
+
+# Local configuration
+local.properties
+
+# Log files
+*.log
+
+# Android Studio
+.idea/
+*.iml
+
+# Generated files
+captures/
+output.json
+
+# Keystore files (no subir llaves privadas)
+*.jks
+*.keystore
+
+# NDK
+obj/
+
+# Misc
+.DS_Store
+Thumbs.db
+
+# Cache
+.cxx/
