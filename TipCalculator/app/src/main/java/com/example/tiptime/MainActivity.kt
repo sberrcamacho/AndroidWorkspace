@@ -108,9 +108,10 @@ fun EditNumberField(
     TextField(
         value = value,
         onValueChange = onValueChange,
+        label = {Text(stringResource(R.string.bill_amount))},
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        label = {stringResource(R.string.bill_amount)}
+        modifier = modifier
     )
 
 }
