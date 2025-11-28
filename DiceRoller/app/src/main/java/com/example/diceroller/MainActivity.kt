@@ -43,7 +43,7 @@ fun DiceWithButtonAndImage(
 ) {
 
     var result by remember() { mutableStateOf(1) }
-    val imageResourse = when(result) {
+    val imageResource = when(result) {
         1 -> R.drawable.dice_1
         2 -> R.drawable.dice_2
         3 -> R.drawable.dice_3
@@ -57,7 +57,7 @@ fun DiceWithButtonAndImage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(imageResourse),
+            painter = painterResource(imageResource),
             contentDescription = result.toString()
         )
 
