@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Taller UI 1</string>
+    <string name="menu_title">Projectos de Aprendizaje</string>
+    <string name="button_1">Ventas + Comisión</string>
+    <string name="button_2">Nota Final</string>
+    <string name="button_3">Salario Neto</string>
+    <string name="button_4">Adivina el Número</string>
+    <string name="button_5">Vectores y Operaciones</string>
+    <string name="text_menu">Aqui hay algunos projectos de los 22 presentados en el taller, con su respectiva UI implementada</string>
+    <string name="sales_text_1">Registra tus ventas y calcula tu comisión al instante.\n\nEl porcentaje de comisiones es de 10%</string>
+    <string name="salario_label">Salario</string>
+    <string name="ventas_al_mes_label">Ventas Al Mes</string>
+    <string name="sales_text_2">"El vendedor obtendra esto de comisiones: %s\n\nEn total tendra: %s"</string>
+    <string name="nota_1_label">Nota 1</string>
+</resources>
