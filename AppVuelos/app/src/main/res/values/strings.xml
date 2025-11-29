@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">App Vuelos</string>
+
+    # pantalla inicial
+    <string name="entrar_boton">Entrar</string>
+    <string name="menu_titulo">Aerolínea Global</string>
+
+    # menu
+    <string name="vuelos_boton_menu">Vuelos</string>
+    <string name="pasajeros_boton_menu">Pasajeros</string>
+    <string name="reservas_boton_menu">Reservas</string>
+
+    # pantalla vuelos
+    <string name="ciudad_de_origen_label">Ciudad de origen</string>
+    <string name="ciudad_de_destino_label">Ciudad de destino</string>
+    <string name="fecha_label">Fecha del vuelo</string>
+    <string name="hora_label">Hora del vuelo</string>
+    <string name="agregar_vuelo_boton">Añadir vuelo</string>
+    <string name="traer_vuelo_boton">Traer vuelo</string>
+    <string name="actualizar_vuelo_boton">Actualizar datos</string>
+    <string name="eliminar_vuelo_boton">Cancelar vuelo</string>
+
+    # pantalla pasajeros
+    <string name="nombre_label">Nombre</string>
+    <string name="apellido_label">Apellido</string>
+    <string name="documento_label">Documento</string>
+    <string name="telefono_label">Teléfono</string>
+    <string name="agregar_pasajero">Agregar pasajero</string>
+    <string name="buscar_pasajero">Buscar pasajero</string>
+    <string name="actualizar_pasajero">Actualizar datos</string>
+    <string name="eliminar_pasajero">Eliminar pasajero</string>
+    
+    # pantalla reservas
+    <string name="vuelo_id_label">Vuelo ID</string>
+    <string name="pasajero_id_label">Pasajero ID</string>
+    <string name="asientos_label">Asientos</string>
+    <string name="agregar_reserva">Añadir reserva</string>
+    <string name="leer_reserva">Leer reserva</string>
+    <string name="actualizar_reserva">Actualizar reserva</string>
+    <string name="eliminar_reserva">Eliminar reserva</string>
+
+    # botones
+    <string name="regresar_boton">Regresar</string>
+
 </resources>
