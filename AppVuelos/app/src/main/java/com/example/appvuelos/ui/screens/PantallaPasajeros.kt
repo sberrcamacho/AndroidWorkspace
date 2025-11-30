@@ -1,4 +1,4 @@
-package com.example.appvuelos
+package com.example.appvuelos.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,27 +13,45 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appvuelos.R
+import com.example.appvuelos.data.database.DatabaseProvider
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.White
+import com.example.appvuelos.ui.viewmodels.PasajeroViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.appvuelos.data.entities.PasajeroEntity
+import com.example.appvuelos.ui.theme.DarkGray
+import com.example.appvuelos.ui.viewmodels.PasajeroViewModelFactory
 
 
 @Composable
-fun PantallaReservas(
+fun PantallaPasajeros(
     modifier: Modifier = Modifier,
     toRegresar: (Int) -> Unit
 ) {
+    val context = LocalContext.current
+    val database = DatabaseProvider.getDatabase(context)
+    val dao = database.pasajeroDao()
+
+    val viewModel: PasajeroViewModel = viewModel(
+        factory = PasajeroViewModelFactory(dao)
+    )
+
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -42,11 +60,10 @@ fun PantallaReservas(
             .wrapContentSize(Alignment.TopCenter)
             .verticalScroll(rememberScrollState())
     ) {
-
-        Spacer(modifier = modifier.height(32.dp))
+        Spacer(modifier = modifier.height(46.dp))
 
         Text(
-            text = stringResource(R.string.reservas_boton_menu),
+            text = stringResource(R.string.pasajeros_boton_menu),
             fontSize = 38.sp,
             color = DarkRed,
             fontWeight = FontWeight.Bold
@@ -54,7 +71,31 @@ fun PantallaReservas(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // inputs text fields
+        Text(
+            text = stringResource(R.string.id_vuelos_text),
+            fontSize = 22.sp,
+            color = DarkGray,
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(bottom = 20.dp, start = 20.dp)
+        )
+
+        val encontrado by viewModel.pasajeroEncontrado
+
+        var nombreInput by remember { mutableStateOf("") }
+        var apellidoInput by remember { mutableStateOf("") }
+        var documentoInput by remember { mutableStateOf("") }
+        var telefonoInput by remember { mutableStateOf("") }
+
+        LaunchedEffect(encontrado) {
+        if (encontrado != null) {
+            nombreInput = encontrado!!.nombre
+            apellidoInput = encontrado!!.apellido
+            documentoInput = encontrado!!.documento
+            telefonoInput = encontrado!!.telefono
+        }
+    }
+
         Column (
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ){
@@ -68,25 +109,32 @@ fun PantallaReservas(
                 .fillMaxWidth()
                 .height(64.dp)
 
-            var vueloInput by remember { mutableStateOf("") }
-            var pasajeroInput by remember { mutableStateOf("") }
-            var asientosInput by remember { mutableStateOf("") }
-
             EntradaDeTexto(
-                value = vueloInput,
-                onValueChange = { vueloInput = it },
-                label = R.string.vuelo_id_label,
-                icon = R.drawable.airplane_ticket_48dp_ffffff_fill1_wght400_grad0_opsz48,
-                keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Next),
+                value = nombreInput,
+                onValueChange = { nombreInput = it },
+                label = R.string.nombre_label,
+                icon = R.drawable.person_48dp_ffffff_fill0_wght400_grad0_opsz48,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
                 shape = shape,
                 fontSize = fontSize,
                 fontSizeInput = fontSize,
                 modifier = modifier
             )
             EntradaDeTexto(
-                value = pasajeroInput,
-                onValueChange = { pasajeroInput = it },
-                label = R.string.pasajero_id_label,
+                value = apellidoInput,
+                onValueChange = { apellidoInput = it },
+                label = R.string.apellido_label,
+                icon = R.drawable.group_48dp_ffffff_fill0_wght400_grad0_opsz48,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                shape = shape,
+                fontSize = fontSize,
+                fontSizeInput = fontSize,
+                modifier = modifier
+            )
+            EntradaDeTexto(
+                value = documentoInput,
+                onValueChange = { documentoInput = it },
+                label = R.string.documento_label,
                 icon = R.drawable.id_card_48dp_ffffff_fill0_wght400_grad0_opsz48,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Next),
                 shape = shape,
@@ -95,10 +143,10 @@ fun PantallaReservas(
                 modifier = modifier
             )
             EntradaDeTexto(
-                value = asientosInput,
-                onValueChange = { asientosInput = it },
-                label = R.string.asientos_label,
-                icon = R.drawable.event_seat_48dp_ffffff_fill1_wght400_grad0_opsz48,
+                value = telefonoInput,
+                onValueChange = { telefonoInput = it },
+                label = R.string.telefono_label,
+                icon = R.drawable.call_48dp_ffffff_fill1_wght400_grad0_opsz48,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
                 shape = shape,
                 fontSize = fontSize,
@@ -120,8 +168,10 @@ fun PantallaReservas(
             val fontSize = 24.sp
 
             BotonCustomizable(
-                text = R.string.agregar_reserva,
-                onClick = {},
+                text = R.string.agregar_pasajero,
+                onClick = {
+                    viewModel.agregar(nombreInput, apellidoInput, documentoInput, telefonoInput)
+                },
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
@@ -129,8 +179,8 @@ fun PantallaReservas(
             )
 
             BotonCustomizable(
-                text = R.string.leer_reserva,
-                onClick = {},
+                text = R.string.buscar_pasajero,
+                onClick = {viewModel.leer(documentoInput)},
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
@@ -138,8 +188,10 @@ fun PantallaReservas(
             )
 
             BotonCustomizable(
-                text = R.string.actualizar_reserva,
-                onClick = {},
+                text = R.string.actualizar_pasajero,
+                onClick = {
+                    viewModel.actualizar(nombreInput, apellidoInput, documentoInput, telefonoInput)
+                },
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
@@ -147,8 +199,14 @@ fun PantallaReservas(
             )
 
             BotonCustomizable(
-                text = R.string.eliminar_reserva,
-                onClick = {},
+                text = R.string.eliminar_pasajero,
+                onClick = {
+                    viewModel.eliminar(documentoInput)
+                    nombreInput = ""
+                    apellidoInput = ""
+                    documentoInput = ""
+                    telefonoInput = ""
+                },
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
@@ -159,12 +217,10 @@ fun PantallaReservas(
         Spacer(modifier = Modifier.height(30.dp))
 
         BotonRegresar(
-            toRegresar = {toRegresar(1)},
+            toRegresar = { toRegresar(1) },
             modifier = Modifier.align(Alignment.Start)
         )
     }
 }
-
-
 
 

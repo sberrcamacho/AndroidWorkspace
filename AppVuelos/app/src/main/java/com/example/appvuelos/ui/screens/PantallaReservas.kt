@@ -1,4 +1,4 @@
-package com.example.appvuelos
+package com.example.appvuelos.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,11 +25,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appvuelos.R
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.White
 
+
 @Composable
-fun PantallaPasajeros(
+fun PantallaReservas(
     modifier: Modifier = Modifier,
     toRegresar: (Int) -> Unit
 ) {
@@ -41,10 +43,11 @@ fun PantallaPasajeros(
             .wrapContentSize(Alignment.TopCenter)
             .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = modifier.height(46.dp))
+
+        Spacer(modifier = modifier.height(32.dp))
 
         Text(
-            text = stringResource(R.string.pasajeros_boton_menu),
+            text = stringResource(R.string.reservas_boton_menu),
             fontSize = 38.sp,
             color = DarkRed,
             fontWeight = FontWeight.Bold
@@ -52,6 +55,7 @@ fun PantallaPasajeros(
 
         Spacer(modifier = Modifier.height(40.dp))
 
+        // inputs text fields
         Column (
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ){
@@ -65,37 +69,25 @@ fun PantallaPasajeros(
                 .fillMaxWidth()
                 .height(64.dp)
 
-            var nombreInput by remember { mutableStateOf("") }
-            var apellidoInput by remember { mutableStateOf("") }
-            var documentoInput by remember { mutableStateOf("") }
-            var telefonoInput by remember { mutableStateOf("") }
+            var vueloInput by remember { mutableStateOf("") }
+            var pasajeroInput by remember { mutableStateOf("") }
+            var asientosInput by remember { mutableStateOf("") }
 
             EntradaDeTexto(
-                value = nombreInput,
-                onValueChange = { nombreInput = it },
-                label = R.string.nombre_label,
-                icon = R.drawable.person_48dp_ffffff_fill0_wght400_grad0_opsz48,
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                value = vueloInput,
+                onValueChange = { vueloInput = it },
+                label = R.string.vuelo_id_label,
+                icon = R.drawable.airplane_ticket_48dp_ffffff_fill1_wght400_grad0_opsz48,
+                keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Next),
                 shape = shape,
                 fontSize = fontSize,
                 fontSizeInput = fontSize,
                 modifier = modifier
             )
             EntradaDeTexto(
-                value = apellidoInput,
-                onValueChange = { apellidoInput = it },
-                label = R.string.apellido_label,
-                icon = R.drawable.group_48dp_ffffff_fill0_wght400_grad0_opsz48,
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-                shape = shape,
-                fontSize = fontSize,
-                fontSizeInput = fontSize,
-                modifier = modifier
-            )
-            EntradaDeTexto(
-                value = documentoInput,
-                onValueChange = { documentoInput = it},
-                label = R.string.documento_label,
+                value = pasajeroInput,
+                onValueChange = { pasajeroInput = it },
+                label = R.string.pasajero_id_label,
                 icon = R.drawable.id_card_48dp_ffffff_fill0_wght400_grad0_opsz48,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Next),
                 shape = shape,
@@ -104,10 +96,10 @@ fun PantallaPasajeros(
                 modifier = modifier
             )
             EntradaDeTexto(
-                value = telefonoInput,
-                onValueChange = { telefonoInput = it },
-                label = R.string.telefono_label,
-                icon = R.drawable.call_48dp_ffffff_fill1_wght400_grad0_opsz48,
+                value = asientosInput,
+                onValueChange = { asientosInput = it },
+                label = R.string.asientos_label,
+                icon = R.drawable.event_seat_48dp_ffffff_fill1_wght400_grad0_opsz48,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
                 shape = shape,
                 fontSize = fontSize,
@@ -129,7 +121,7 @@ fun PantallaPasajeros(
             val fontSize = 24.sp
 
             BotonCustomizable(
-                text = R.string.agregar_pasajero,
+                text = R.string.agregar_reserva,
                 onClick = {},
                 fontSize = fontSize,
                 contentColor = White,
@@ -138,7 +130,7 @@ fun PantallaPasajeros(
             )
 
             BotonCustomizable(
-                text = R.string.buscar_pasajero,
+                text = R.string.leer_reserva,
                 onClick = {},
                 fontSize = fontSize,
                 contentColor = White,
@@ -147,7 +139,7 @@ fun PantallaPasajeros(
             )
 
             BotonCustomizable(
-                text = R.string.actualizar_pasajero,
+                text = R.string.actualizar_reserva,
                 onClick = {},
                 fontSize = fontSize,
                 contentColor = White,
@@ -156,7 +148,7 @@ fun PantallaPasajeros(
             )
 
             BotonCustomizable(
-                text = R.string.eliminar_pasajero,
+                text = R.string.eliminar_reserva,
                 onClick = {},
                 fontSize = fontSize,
                 contentColor = White,
@@ -168,10 +160,12 @@ fun PantallaPasajeros(
         Spacer(modifier = Modifier.height(30.dp))
 
         BotonRegresar(
-            toRegresar = {toRegresar(1)},
+            toRegresar = { toRegresar(1) },
             modifier = Modifier.align(Alignment.Start)
         )
     }
 }
+
+
 
 

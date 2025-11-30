@@ -21,6 +21,7 @@
     <string name="eliminar_vuelo_boton">Cancelar vuelo</string>
 
     # pantalla pasajeros
+    <string name="id_vuelos_text">ID: %s</string>
     <string name="nombre_label">Nombre</string>
     <string name="apellido_label">Apellido</string>
     <string name="documento_label">Documento</string>
@@ -39,7 +40,12 @@
     <string name="actualizar_reserva">Actualizar reserva</string>
     <string name="eliminar_reserva">Eliminar reserva</string>
 
-    # botones
-    <string name="regresar_boton">Regresar</string>
+    # boton regresar
+    <string name="regresar_boton">Regresar al menú</string>
+
+    # Data picker
+    <string name="confirmar_boton_datapicker">Confirmar</string>
+    <string name="cancelar_boton_datapicker">Cancelar</string>
+
 
 </resources>

@@ -1,10 +1,13 @@
-package com.example.appvuelos
+package com.example.appvuelos.ui.screens
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,15 +24,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appvuelos.R
 import com.example.appvuelos.ui.theme.DarkGray
 import com.example.appvuelos.ui.theme.DarkRed
-import com.example.appvuelos.ui.theme.OtherWhite
-import com.example.appvuelos.ui.theme.Periwinkle
 import com.example.appvuelos.ui.theme.White
 
 @Composable
@@ -55,6 +60,21 @@ fun PantallaVuelos(
 
         Spacer(modifier = Modifier.height(40.dp))
 
+        Text(
+            text = stringResource(R.string.id_vuelos_text,"1"),
+            fontSize = 22.sp,
+            color = DarkGray,
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(bottom = 20.dp, start = 20.dp)
+        )
+
+        var showDatePicker by remember { mutableStateOf(false) }
+        var showHourPicker by remember { mutableStateOf(false) }
+
+        var fechaInput by remember { mutableStateOf("") }
+        var horaInput by remember { mutableStateOf("") }
+
         Column (
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ){
@@ -67,12 +87,12 @@ fun PantallaVuelos(
 
             var ciudadOrigenInput by remember { mutableStateOf("") }
             var ciudadDestinoInput by remember { mutableStateOf("") }
-            var fechaInput by remember { mutableStateOf("Fecha del vuelo") }
-            var horaInput by remember { mutableStateOf("") }
+
+
 
             EntradaDeTexto(
                 value = ciudadOrigenInput,
-                onValueChange = { ciudadOrigenInput = it},
+                onValueChange = { ciudadOrigenInput = it },
                 label = R.string.ciudad_de_origen_label,
                 icon = R.drawable.flight_takeoff_48dp_ffffff_fill0_wght400_grad0_opsz48,
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
@@ -92,27 +112,74 @@ fun PantallaVuelos(
                 fontSizeInput = fontSize,
                 modifier = modifier
             )
-            EntradaCalendario(
-                text = fechaInput,
-                fontSize = fontSize,
-                contentColor = DarkGray,
-                containerColor = OtherWhite,
-                shape = shape,
-                scaleIcon = 1.4F,
+
+            Box(
                 modifier = modifier
-            )
-            EntradaDeTexto(
-                value = horaInput,
-                onValueChange = { horaInput = it },
-                label = R.string.hora_label,
-                icon = R.drawable.schedule_48dp_ffffff_fill0_wght400_grad0_opsz48,
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                shape = shape,
-                fontSize = fontSize,
-                fontSizeInput = fontSize,
+            ) {
+                EntradaDeTexto(
+                    value = fechaInput,
+                    onValueChange = {},
+                    label = R.string.fecha_label,
+                    icon = R.drawable.date_range_48dp_ffffff_fill0_wght400_grad0_opsz48,
+                    shape = shape,
+                    readOnly = true,
+                    enabled = true,
+                    fontSize = fontSize,
+                    fontSizeInput = fontSize,
+                    modifier = modifier
+                )
+
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                showDatePicker = true
+                            }
+                        }
+                )
+            }
+
+            Box(
                 modifier = modifier
-            )
+            ) {
+                EntradaDeTexto(
+                    value = horaInput,
+                    onValueChange = {},
+                    label = R.string.hora_label,
+                    icon = R.drawable.schedule_48dp_ffffff_fill0_wght400_grad0_opsz48,
+                    shape = shape,
+                    fontSize = fontSize,
+                    fontSizeInput = fontSize,
+                    readOnly = true,
+                    enabled = true,
+                    modifier = modifier
+                )
+
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                showHourPicker = true
+                            }
+                        }
+                )
+            }
         }
+
+
+        AbrirDatePicker(
+            show = showDatePicker,
+            onDismiss = { showDatePicker = false },
+            onDateSelected = { fechaInput = it }
+        )
+
+        AbrirTimePicker(
+            show = showHourPicker,
+            onDismiss = { showHourPicker = false },
+            hourSelected = { horaInput = it }
+        )
 
         Spacer(modifier = Modifier.height(40.dp))
 
@@ -166,8 +233,18 @@ fun PantallaVuelos(
         Spacer(modifier = Modifier.height(30.dp))
 
         BotonRegresar(
-            toRegresar = {toRegresar(1)},
+            toRegresar = { toRegresar(1) },
             modifier = Modifier.align(Alignment.Start)
         )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun preview() {
+    Surface(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        PantallaVuelos() { }
     }
 }

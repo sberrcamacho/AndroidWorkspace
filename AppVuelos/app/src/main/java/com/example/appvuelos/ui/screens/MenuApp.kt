@@ -1,15 +1,13 @@
-package com.example.appvuelos
+package com.example.appvuelos.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,10 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.appvuelos.ui.theme.AppVuelosTheme
+import com.example.appvuelos.R
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.LightGray
 import com.example.appvuelos.ui.theme.White
@@ -66,7 +63,7 @@ fun MenuApp(
 
             BotonCustomizable(
                 text = R.string.pasajeros_boton_menu,
-                onClick = {to(3)},
+                onClick = { to(3) },
                 fontSize = 32.sp,
                 contentColor = Color.Black,
                 containerColor = LightGray,
@@ -75,7 +72,7 @@ fun MenuApp(
 
             BotonCustomizable(
                 text = R.string.reservas_boton_menu,
-                onClick = {to(4)},
+                onClick = { to(4) },
                 fontSize = 32.sp,
                 contentColor = Color.Black,
                 containerColor = LightGray,
