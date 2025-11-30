@@ -25,24 +25,23 @@ import com.example.tallerui1.R
 import java.text.NumberFormat
 
 @Composable
-fun SalesScreen(
+fun VentasScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .wrapContentSize()
-            .padding(30.dp)
+            .padding(26.dp)
     ) {
         Text(
             text = stringResource(R.string.button_1),
-            style = MaterialTheme.typography.headlineLarge.copy(
+            style = MaterialTheme.typography.displaySmall.copy(
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
-            maxLines = 2,
-            softWrap = true
+            maxLines = 2
         )
 
         Text(
@@ -77,7 +76,7 @@ fun SalesScreen(
                 label = R.string.salario_label,
                 onValueChange = {salaryInput = it},
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Next),
-                leadingIcon = R.drawable.money_48dp_ffffff_fill0_wght400_grad0_opsz48
+                leadingIcon = R.drawable.money_48dp_ffffff_fill1_wght400_grad0_opsz48
             )
 
             TextFieldInput(
@@ -85,7 +84,7 @@ fun SalesScreen(
                 label = R.string.ventas_al_mes_label,
                 onValueChange = {salesInput = it},
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
-                leadingIcon = R.drawable.attach_money_48dp_ffffff_fill0_wght400_grad0_opsz48
+                leadingIcon = R.drawable.attach_money_48dp_ffffff_fill1_wght400_grad0_opsz48
             )
 
         }

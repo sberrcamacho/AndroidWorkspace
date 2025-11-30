@@ -26,12 +26,11 @@ fun MenuApp(
     Column(
         modifier = modifier
             .wrapContentSize()
-            .padding(30.dp)
-            .verticalScroll(rememberScrollState())
+            .padding(26.dp)
     ) {
         Text(
             text = stringResource(R.string.menu_title),
-            style = MaterialTheme.typography.headlineLarge.copy(
+            style = MaterialTheme.typography.displaySmall.copy(
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier
@@ -44,7 +43,7 @@ fun MenuApp(
 
         Text(
             text = stringResource(R.string.text_menu),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.bodyLarge
         )
 
         Spacer(modifier = Modifier.height(100.dp))

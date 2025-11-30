@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Taller UI 1</string>
+
+    Menu de la app
     <string name="menu_title">Projectos de Aprendizaje</string>
     <string name="button_1">Ventas + Comisión</string>
     <string name="button_2">Nota Final</string>
@@ -7,9 +9,27 @@
     <string name="button_4">Adivina el Número</string>
     <string name="button_5">Vectores y Operaciones</string>
     <string name="text_menu">Aqui hay algunos projectos de los 22 presentados en el taller, con su respectiva UI implementada</string>
+
+    Pantalla de ventas
     <string name="sales_text_1">Registra tus ventas y calcula tu comisión al instante.\n\nEl porcentaje de comisiones es de 10%</string>
     <string name="salario_label">Salario</string>
     <string name="ventas_al_mes_label">Ventas Al Mes</string>
     <string name="sales_text_2">"El vendedor obtendra esto de comisiones: %s\n\nEn total tendra: %s"</string>
+
+    Notas
     <string name="nota_1_label">Nota 1</string>
+    <string name="nota_2_label">Nota 2</string>
+    <string name="nota_3_label">Nota 3</string>
+    <string name="nota_examen_label">Nota examen</string>
+    <string name="trabajo_final_label">Trabajo final</string>
+    <string name="nota_final">La nota final del curso es de %s</string>
+    <string name="notes_text">Calcula tu nota final usando tus parciales, examen y trabajo final.\n\nLa nota final se calcula con 55% de parciales, 30% del examen final y 15% del trabajo final.</string>
+
+    Salario neto
+    <string name="text_salario_screen">Calcula tu salario neto según días trabajados, salario básico y deducciones.\n\nEl salario mínimo es de $1.400.000</string>
+    <string name="codigo_label">Codigo</string>
+    <string name="dias_label">Numero de dias trabajados</string>
+    <string name="salario">Salario por dia</string>
+    <string name="resultado_screen_salario">Su salario neto seria de %s</string>
+    <string name="resultado_codigo_salario">Codigo: %s</string>
 </resources>

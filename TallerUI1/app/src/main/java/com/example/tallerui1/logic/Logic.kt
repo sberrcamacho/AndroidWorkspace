@@ -6,14 +6,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.tallerui1.screens.MenuApp
-import com.example.tallerui1.screens.SalesScreen
+import com.example.tallerui1.screens.NotesScreen
+import com.example.tallerui1.screens.SalarioScreen
+import com.example.tallerui1.screens.VentasScreen
 
 @Composable
 fun MainApp() {
     var screen by remember { mutableStateOf(0) }
     when (screen) {
         0 -> MenuApp { screen = it }
-        1 -> SalesScreen()
+        1 -> VentasScreen()
+        2 -> NotesScreen()
+        3 -> SalarioScreen()
     }
 
 }

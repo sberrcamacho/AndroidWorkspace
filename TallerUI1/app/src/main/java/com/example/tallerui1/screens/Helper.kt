@@ -45,7 +45,7 @@ fun CustomButton(
     ) {
         Text(
             text = stringResource(text),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.titleMedium
         )
     }
 }
