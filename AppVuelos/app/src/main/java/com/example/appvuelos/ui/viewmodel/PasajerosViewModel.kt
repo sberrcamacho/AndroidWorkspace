@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appvuelos.data.dao.PasajerosDao
 import com.example.appvuelos.data.entities.PasajerosEntity
+import com.example.appvuelos.ui.screens.toValidNameOrUnknown
 import kotlinx.coroutines.launch
 
 class PasajerosViewModel(private val pasajerosDao: PasajerosDao) : ViewModel() {
@@ -16,8 +17,8 @@ class PasajerosViewModel(private val pasajerosDao: PasajerosDao) : ViewModel() {
     ) {
         viewModelScope.launch {
             val pasajeroEntity = PasajerosEntity(
-                nombre = nombre,
-                apellido = apellido,
+                nombre = nombre.toValidNameOrUnknown(),
+                apellido = apellido.toValidNameOrUnknown(),
                 documento = documento,
                 telefono = telefono
             )

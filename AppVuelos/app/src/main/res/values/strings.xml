@@ -54,6 +54,7 @@
     <string name="solo_letras">Ingrese solamente letras</string>
     <string name="solo_numeros">Ingrese solamente numeros</string>
     <string name="solo_alphanumerico">Ingrese solamente numeros o letras</string>
+    <string name="mostrar_vuelos_boton">Mostrar vuelos</string>
 
 
 </resources>

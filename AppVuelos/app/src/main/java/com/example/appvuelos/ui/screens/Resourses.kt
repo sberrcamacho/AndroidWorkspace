@@ -4,10 +4,15 @@ package com.example.appvuelos.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -18,11 +23,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerDefaults
@@ -33,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -47,10 +55,14 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appvuelos.R
+import com.example.appvuelos.data.dao.VuelosDao
+import com.example.appvuelos.data.entities.VuelosEntity
 import com.example.appvuelos.ui.theme.DarkGray
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.Orange
 import com.example.appvuelos.ui.theme.White
+import com.example.appvuelos.ui.viewmodel.VuelosViewModel
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -335,6 +347,48 @@ fun DialogIdPasajero(
     )
 }
 
+fun Long.toFormattedDateString(): String {
+    val localDate = Instant.ofEpochMilli(this)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate()
+
+    val formatter = DateTimeFormatter.ofPattern(
+        "MMMM d, yyyy",
+        Locale("es")
+    )
+
+    val formatted = localDate.format(formatter)
+    return formatted.replaceFirstChar { it.uppercase() }
+}
+
+fun Long.toFormattedHour(): String {
+    val time = Instant.ofEpochMilli(this)
+        .atZone(ZoneId.systemDefault())
+        .toLocalTime()
+
+    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+    return time.format(formatter)
+}
+
+fun Long.toFormattedShortDateString(): String {
+    val localDate = Instant.ofEpochMilli(this)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate()
+
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yy", Locale("es"))
+    return localDate.format(formatter)
+}
+
+fun Long.toFormattedShortHour(): String {
+    val localTime = Instant.ofEpochMilli(this)
+        .atZone(ZoneId.systemDefault())
+        .toLocalTime()
+
+    val formatter = DateTimeFormatter.ofPattern("HH:mm") // 24h
+    return localTime.format(formatter)
+}
+
+
 fun String.toValidNameOrUnknown(): String {
     val trimmed = this.trim()
 
@@ -376,6 +430,51 @@ fun CampoID(
         modifier = modifier.height(50.dp)
     )
 }
+
+@Composable
+fun DialogVuelos(
+    onDismiss: () -> Unit,
+    vuelos: List<VuelosEntity>
+) {
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Lista de Vuelos") },
+        text = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                // Encabezado
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text("ID", modifier = Modifier.weight(0.8f))
+                    Text("Origen", modifier = Modifier.weight(2f))
+                    Text("Destino", modifier = Modifier.weight(2f))
+                    Text("Fecha", modifier = Modifier.weight(2f))
+                    Text("Hora", modifier = Modifier.weight(1.2f))
+                    }
+                Divider(modifier = Modifier.padding(vertical = 4.dp))
+                // Filas de datos
+                LazyColumn(modifier = Modifier.height(220.dp)) {
+                    items(vuelos) { vuelo ->
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text(vuelo.idVuelo.toString(), modifier = Modifier.weight(0.8f))
+                            Text(vuelo.origen, modifier = Modifier.weight(2f))
+                            Text(vuelo.destino, modifier = Modifier.weight(2f))
+                            Text(vuelo.fecha.toFormattedShortDateString(), modifier = Modifier.weight(2f))
+                            Text(vuelo.hora.toFormattedShortHour(), modifier = Modifier.weight(1.2f))
+                        }
+                        Divider(modifier = Modifier.padding(vertical = 4.dp))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cerrar")
+            }
+        }
+    )
+}
+
+
 
 
 

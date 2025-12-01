@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appvuelos.R
 import com.example.appvuelos.application.RoomApplication
+import com.example.appvuelos.data.entities.VuelosEntity
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.White
 import com.example.appvuelos.ui.viewmodel.VuelosViewModel
@@ -49,6 +50,7 @@ fun PantallaVuelos(
 
     // UI States
     var dialogMode by remember { mutableStateOf(DialogMode.NONE) }
+    var showVuelos by remember { mutableStateOf(false) }
 
     var ciudadOrigen by remember { mutableStateOf("") }
     var ciudadDestino by remember { mutableStateOf("") }
@@ -84,7 +86,9 @@ fun PantallaVuelos(
 
         BotonRegresar(
             toRegresar = { toRegresar(1) },
-            modifier = Modifier.align(Alignment.Start).padding(bottom = 20.dp)
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(bottom = 20.dp)
         )
 
         Text(
@@ -238,19 +242,17 @@ fun PantallaVuelos(
             BotonCustomizable(
                 text = R.string.agregar_vuelo_boton,
                 onClick = {
-                    if (fechaMillis != null && horaMillis != null) {
-                        viewModel.addVuelo(
-                            ciudadOrigen.toValidNameOrUnknown(),
-                            ciudadDestino.toValidNameOrUnknown(),
-                            fechaMillis!!,
-                            horaMillis!!
-                        ) {
-                            ciudadOrigen = ""
-                            ciudadDestino = ""
-                            fechaInput = ""
-                            horaInput = ""
-                            refreshNextId()
-                        }
+                    viewModel.addVuelo(
+                        ciudadOrigen,
+                        ciudadDestino,
+                        fechaMillis,
+                        horaMillis
+                    ) {
+                        ciudadOrigen = ""
+                        ciudadDestino = ""
+                        fechaInput = ""
+                        horaInput = ""
+                        refreshNextId()
                     }
                 },
                 fontSize = fontSize,
@@ -285,6 +287,15 @@ fun PantallaVuelos(
                 containerColor = DarkRed,
                 modifier = btnModifier
             )
+
+            BotonCustomizable(
+                text = R.string.mostrar_vuelos_boton,
+                onClick = { showVuelos = true },
+                fontSize = fontSize,
+                contentColor = White,
+                containerColor = DarkRed,
+                modifier = btnModifier
+            )
         }
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -302,42 +313,33 @@ fun PantallaVuelos(
                 onConfirm = { id ->
                     when (dialogMode) {
                         DialogMode.BUSCAR -> {
-                            viewModel.getVueloById(id) { vuelo ->
-                                vuelo?.let {
-                                    ciudadOrigen = it.ciudadOrigen
-                                    ciudadDestino = it.ciudadDestino
-                                    fechaInput = it.fecha.toFormattedDateString()
-                                    horaInput = it.hora.toFormattedHour()
-                                    nextId = it.idVuelo
-                                }
+                            viewModel.buscarVuelo(id) { vuelo ->
+                                ciudadOrigen = vuelo[0]
+                                ciudadDestino = vuelo[1]
+                                fechaInput = vuelo[2]
+                                horaInput = vuelo[3]
+                                nextId = vuelo[4].toInt()
                             }
                         }
 
                         DialogMode.ACTUALIZAR -> {
-                            viewModel.getVueloById(id) { vuelo ->
-                                vuelo?.let {
-                                    if (fechaMillis != null && horaMillis != null) {
-                                        viewModel.updateVuelo(
-                                            idVuelo = it.idVuelo,
-                                            ciudadOrigen = ciudadOrigen.toValidNameOrUnknown(),
-                                            ciudadDestino = ciudadDestino.toValidNameOrUnknown(),
-                                            fecha = fechaMillis!!,
-                                            hora = horaMillis!!
-                                        )
-
-                                        ciudadOrigen = ""
-                                        ciudadDestino = ""
-                                        fechaInput = ""
-                                        horaInput = ""
-                                        refreshNextId()
-                                    }
-                                }
+                            viewModel.updateVuelo(id, ciudadOrigen, ciudadDestino, fechaMillis, horaMillis) {
+                                refreshNextId()
+                                ciudadOrigen = ""
+                                ciudadDestino = ""
+                                fechaInput = ""
+                                horaInput = ""
                             }
                         }
 
                         DialogMode.ELIMINAR -> {
-                            viewModel.deleteVueloById(id)
-                            refreshNextId()
+                            viewModel.deleteVueloById(id) {
+                                refreshNextId()
+                                ciudadOrigen = ""
+                                ciudadDestino = ""
+                                fechaInput = ""
+                                horaInput = ""
+                            }
                         }
 
                         else -> {}
@@ -346,28 +348,21 @@ fun PantallaVuelos(
                 }
             )
         }
+
+        if (showVuelos) {
+            var vuelos by remember { mutableStateOf<List<VuelosEntity>>(emptyList()) }
+
+            LaunchedEffect(Unit) {
+                viewModel.getAllVuelos { lista ->
+                    vuelos = lista
+                }
+            }
+
+            DialogVuelos(
+                onDismiss = { showVuelos = false },
+                vuelos = vuelos
+            )
+        }
     }
 }
 
-private fun Long.toFormattedDateString(): String {
-    val localDate = Instant.ofEpochMilli(this)
-        .atZone(ZoneId.systemDefault())
-        .toLocalDate()
-
-    val formatter = DateTimeFormatter.ofPattern(
-        "MMMM d, yyyy",
-        Locale("es")
-    )
-
-    val formatted = localDate.format(formatter)
-    return formatted.replaceFirstChar { it.uppercase() }
-}
-
-private fun Long.toFormattedHour(): String {
-    val time = Instant.ofEpochMilli(this)
-        .atZone(ZoneId.systemDefault())
-        .toLocalTime()
-
-    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-    return time.format(formatter)
-}

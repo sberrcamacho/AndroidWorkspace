@@ -279,6 +279,10 @@ fun PantallaPasajeros(
                         DialogMode.ELIMINAR -> {
                             viewModel.deletePasajeroById(id)
                             refreshNextId()
+                            nombreInput = ""
+                            apellidoInput = ""
+                            documentoInput = ""
+                            telefonoInput = ""
                         }
                         DialogMode.ACTUALIZAR -> {
                             viewModel.getPasajeroById(id) {

@@ -283,6 +283,9 @@ fun PantallaReservas(
                         ReservaDialogMode.ELIMINAR -> {
                             viewModel.deleteReservaById(id)
                             refreshNextId()
+                            vueloInput = ""
+                            pasajeroInput = ""
+                            asientoInput = ""
                         }
 
                         ReservaDialogMode.ACTUALIZAR -> {

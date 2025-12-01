@@ -24,6 +24,10 @@ interface VuelosDao {
     @Query("DELETE FROM vuelos WHERE idVuelo = :id")
     suspend fun deleteById(id: Int)
 
+    // get all
+    @Query("SELECT * FROM vuelos")
+    suspend fun getAll(): List<VuelosEntity>
+
     // delete all
     @Query("DELETE FROM vuelos")
     suspend fun deleteAll()
