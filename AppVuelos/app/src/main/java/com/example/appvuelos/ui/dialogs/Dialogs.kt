@@ -54,8 +54,11 @@ fun VuelosDialogs(
 ) {
     var nextId by remember { mutableStateOf(nextId) }
 
-    fun refreshNextId() {
-        viewModel.getNextVueloId { id -> nextId = id }
+    fun refreshNextId(onComplete: (Int) -> Unit = {}) {
+        viewModel.getNextVueloId { id ->
+            nextId = id
+            onComplete(id)
+        }
     }
 
     when (dialogMode) {
@@ -99,12 +102,14 @@ fun VuelosDialogs(
                             onUpdateInputs(vuelo[0], vuelo[1], vuelo[2], vuelo[3], vuelo[4].toInt())
                         }
                         DialogMode.ACTUALIZAR -> viewModel.updateVuelo(id, ciudadOrigen, ciudadDestino, fechaMillis, horaMillis) {
-                            refreshNextId()
-                            onUpdateInputs("", "", "", "", nextId)
+                            refreshNextId() {
+                                onUpdateInputs("", "", "", "", nextId)
+                            }
                         }
                         DialogMode.ELIMINAR -> viewModel.deleteVueloById(id) {
-                            refreshNextId()
-                            onUpdateInputs("", "", "", "", nextId)
+                            refreshNextId() {
+                                onUpdateInputs("", "", "", "", nextId)
+                            }
                         }
                         else -> {}
                     }
@@ -129,8 +134,11 @@ fun PasajerosDialogs(
 ) {
     var nextId by remember { mutableStateOf(nextId) }
 
-    fun refreshNextId() {
-        viewModel.getNextPasajeroId { id -> nextId = id }
+    fun refreshNextId(onComplete: (Int) -> Unit = {}) {
+        viewModel.getNextPasajeroId { id ->
+            nextId = id
+            onComplete(id)
+        }
     }
 
     when (dialogMode) {
@@ -187,13 +195,15 @@ fun PasajerosDialogs(
                             documento,
                             telefono
                         ) {
-                            refreshNextId()
-                            onUpdateInputs("", "", "", "", nextId)
+                            refreshNextId() {
+                                onUpdateInputs("", "", "", "", nextId)
+                            }
                         }
 
                         DialogMode.ELIMINAR -> viewModel.deletePasajeroById(id) {
-                            refreshNextId()
-                            onUpdateInputs("", "", "", "", nextId)
+                            refreshNextId() {
+                                onUpdateInputs("", "", "", "", nextId)
+                            }
                         }
 
                         else -> {}
@@ -218,8 +228,11 @@ fun ReservasDialogs(
 ) {
     var nextId by remember { mutableStateOf(nextId) }
 
-    fun refreshNextId() {
-        viewModel.getNextReservaId { id -> nextId = id }
+    fun refreshNextId(onComplete: (Int) -> Unit = {}) {
+        viewModel.getNextReservaId { id ->
+            nextId = id
+            onComplete(id)
+        }
     }
 
     when (dialogMode) {
@@ -280,13 +293,15 @@ fun ReservasDialogs(
                             idPasajeroInput ?: 0,
                             asientoInput
                         ) {
-                            refreshNextId()
-                            onUpdateInputs("", "", "", nextId)
+                            refreshNextId() {
+                                onUpdateInputs("", "", "", nextId)
+                            }
                         }
 
                         DialogMode.ELIMINAR -> viewModel.deleteReservaById(id) {
-                            refreshNextId()
-                            onUpdateInputs("", "", "", nextId)
+                            refreshNextId() {
+                                onUpdateInputs("", "", "", nextId)
+                            }
                         }
 
                         else -> {}
