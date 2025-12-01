@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,13 +27,21 @@ import java.text.NumberFormat
 
 @Composable
 fun VentasScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    toRegresar: (Int) -> Unit
 ) {
     Column(
         modifier = modifier
             .wrapContentSize()
             .padding(26.dp)
     ) {
+        BotonRegresar(
+            toRegresar = { toRegresar(0) },
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(bottom = 20.dp)
+        )
+
         Text(
             text = stringResource(R.string.button_1),
             style = MaterialTheme.typography.displaySmall.copy(

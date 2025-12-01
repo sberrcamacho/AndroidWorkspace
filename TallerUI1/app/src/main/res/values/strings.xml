@@ -32,4 +32,14 @@
     <string name="salario">Salario por dia</string>
     <string name="resultado_screen_salario">Su salario neto seria de %s</string>
     <string name="resultado_codigo_salario">Codigo: %s</string>
+
+    Numero Adivina
+    <string name="adivinar_numero_text">Número (1–100)</string>
+    <string name="error_solo_numeros">Ingrese solamente números</string>
+    <string name="error_rango">Ingrese un número entre 1 y 100</string>
+
+    Numeros
+    <string name="error_rango_mayor_144">Valor superior (mínimo 145)</string>
+    <string name="ingresa_rango">Ingresa un número mayor a 144</string>
+
 </resources>
