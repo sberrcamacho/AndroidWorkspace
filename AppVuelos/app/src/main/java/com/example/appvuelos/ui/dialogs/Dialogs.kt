@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -428,7 +428,7 @@ private fun DialogVuelos(
                     Text("Fecha", color = color, fontWeight = fontWeight, modifier = Modifier.weight(2f))
                     Text("Hora", color = color, fontWeight = fontWeight, modifier = Modifier.weight(1.2f))
                     }
-                Divider(modifier = Modifier.padding(vertical = 4.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                 // Filas de datos
                 LazyColumn(modifier = Modifier.height(220.dp)) {
                     items(vuelos) { vuelo ->
@@ -439,7 +439,7 @@ private fun DialogVuelos(
                             Text(vuelo.fecha.toFormattedShortDateString(), modifier = Modifier.weight(2f))
                             Text(vuelo.hora.toFormattedShortHour(), modifier = Modifier.weight(1.2f))
                         }
-                        Divider(modifier = Modifier.padding(vertical = 4.dp))
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                     }
                 }
             }
@@ -481,7 +481,7 @@ private fun DialogPasajeros(
                     Text("Doc", color = color, fontWeight = fontWeight, modifier = Modifier.weight(1.5f))
                     Text("Tel", color = color, fontWeight = fontWeight, modifier = Modifier.weight(1.5f))
                 }
-                Divider(modifier = Modifier.padding(vertical = 4.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
                 // Filas de datos
                 LazyColumn(modifier = Modifier.height(220.dp)) {
@@ -496,7 +496,7 @@ private fun DialogPasajeros(
                             Text(pasajero.documento.toString(), modifier = Modifier.weight(1.5f))
                             Text(pasajero.telefono.toString(), modifier = Modifier.weight(1.5f))
                         }
-                        Divider(modifier = Modifier.padding(vertical = 4.dp))
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                     }
                 }
             }
@@ -537,7 +537,7 @@ private fun DialogReservas(
                     Text("Asiento", color = color, fontWeight = fontWeight, modifier = Modifier.weight(1.2f))
                 }
 
-                Divider(modifier = Modifier.padding(vertical = 4.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
                 // Filas de datos
                 LazyColumn(modifier = Modifier.height(220.dp)) {
@@ -551,7 +551,7 @@ private fun DialogReservas(
                             Text(reserva.idPasajero.toString(), modifier = Modifier.weight(1.5f))
                             Text(reserva.asiento, modifier = Modifier.weight(1.2f))
                         }
-                        Divider(modifier = Modifier.padding(vertical = 4.dp))
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                     }
                 }
             }
