@@ -1,35 +1,52 @@
-# Android Studio – GreetingCard & HappyBirthday
+# AndroidWorkspace
 
-Este repositorio contiene dos módulos simples creados en Android Studio con fines de aprendizaje.  
-Los módulos muestran conceptos básicos de desarrollo Android usando **Kotlin** y **Jetpack Compose**.
+Colección de proyectos de Android / Jetpack Compose para práctica y aprendizaje.
 
-## 🎯 Objetivo
+## 🚀 Proyectos incluidos
 
-Este proyecto fue creado para practicar:
+| # | Nombre del módulo / proyecto | Descripción breve |
+|---|----------------------------|------------------|
+| 1 | AppVuelos | Aplicación de gestión de vuelos, pasajeros y reservas (CRUD + validaciones + UI con Compose). |
+| 2 | BusinessCard | Proyecto de ejemplo que muestra una tarjeta de presentación usando Compose. |
+| 3 | ComposeArticle | Ejemplo de artículo/interfaz con Compose. |
+| 4 | ComposeQuadrant | Demo de layout con 4 secciones usando Compose. |
+| 5 | DiceRoller | App sencilla: simula lanzar un dado. |
+| 6 | GreetingCard | Ejemplo básico con Compose: muestra un saludo personalizable. |
+| 7 | HappyBirthday | Pequeña app que muestra mensaje de cumpleaños con imagen y estilos. |
+| 8 | Lemonade | Ejemplo/tutorial de UI con Compose. |
+| 9 | TallerUI1 | Proyecto de práctica UI con Compose. |
+| 10 | TaskManager | Demo de gestión de tareas / lista de tareas con Compose. |
+| 11 | TipCalculator | App simple que calcula propinas (tips) dado un monto. |
 
-- Creación de proyectos y módulos en Android Studio  
-- Construcción de interfaces con Jetpack Compose  
-- Manejo de múltiples módulos en un solo proyecto  
-- Uso básico de Git para control de versiones  
+## 📦 Tecnologías utilizadas
 
-## 🔧 Módulos
+- Kotlin  
+- Android Studio  
+- Jetpack Compose  
+- Room (para AppVuelos)  
+- Material Design (Material3)
 
-### **1. GreetingCard**
-Una pequeña interfaz hecha con Compose que muestra un mensaje de saludo personalizable.
+## ▶️ Cómo ejecutar un módulo
 
-### **2. HappyBirthday**
-Una app sencilla que muestra un mensaje de cumpleaños con imagen y estilos.
+1. Clona o abre el proyecto desde Android Studio.  
+2. Si ya está abierto, selecciona el módulo deseado en el selector de módulos (run‑configuration).  
+3. Ejecuta en emulador o dispositivo real.  
+4. Para `AppVuelos`, asegúrate de que la base de datos se inicializa correctamente.  
 
-## ⚙️ Tecnologías Utilizadas
+## 📝 Detalles de AppVuelos
 
-- **Kotlin**
-- **Android Studio**
-- **Jetpack Compose**
-- **Material Design Components**
+`AppVuelos` es tu proyecto principal. Permite:
 
-## ▶️ Cómo Ejecutarlo
+- Crear, editar, eliminar y listar **Vuelos** (origen / destino / fecha / hora).  
+- Crear, editar, eliminar y listar **Pasajeros** (nombre, apellido, documento, teléfono — con validaciones).  
+- Crear **Reservas**, asociando pasajeros con vuelos + asiento; además actualizar o eliminar reservas.  
+- Listados con diálogos que muestran los datos en tablas (rows/columns).  
+- Validaciones de entrada, formatos de fecha/hora, control de sesión para un solo usuario.  
 
-1. Abre Android Studio  
-2. Ve a **File → Open** y selecciona `AndroidWorkspace`  
-3. Espera a que Gradle sincronice  
-4. Ejecuta cualquiera de los módulos desde el selector de dispositivos
+## 📄 Licencia & Créditos
+
+Este repositorio es para fines educativos. Si usas alguno de estos ejemplos, siéntete libre de adaptarlo.  
+
+---
+
+¡Gracias por visitar este repositorio! 🙌
