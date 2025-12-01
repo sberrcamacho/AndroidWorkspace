@@ -19,6 +19,8 @@
     <string name="traer_vuelo_boton">Traer vuelo</string>
     <string name="actualizar_vuelo_boton">Actualizar datos</string>
     <string name="eliminar_vuelo_boton">Cancelar vuelo</string>
+    <string name="mostrar_vuelos_boton">Mostrar vuelos</string>
+    <string name="eliminar_todos_boton">Eliminar todos</string>
 
     # pantalla pasajeros
     <string name="id_vuelos_text">ID: %s</string>
@@ -31,6 +33,8 @@
     <string name="buscar_pasajero">Buscar pasajero</string>
     <string name="actualizar_pasajero">Actualizar datos</string>
     <string name="eliminar_pasajero">Eliminar pasajero</string>
+    <string name="mostrar_todos_pasajeros">Mostrar pasajeros</string>
+    <string name="eliminar_todos_pasajeros">Eliminar todos</string>
 
     <string name="buscar_dialog_id_title">Ingrese el ID a buscar</string>
     <string name="actualizar_dialog_id_title">Ingrese el ID a actualizar</string>
@@ -45,16 +49,19 @@
     <string name="leer_reserva">Leer reserva</string>
     <string name="actualizar_reserva">Actualizar reserva</string>
     <string name="eliminar_reserva">Eliminar reserva</string>
+    <string name="mostrar_todos_reservas">Mostrar reservas</string>
+    <string name="eliminar_todos_reservas">Eliminar todos</string>
 
     # Data picker
     <string name="confirmar_boton_datapicker">Confirmar</string>
     <string name="cancelar_boton_datapicker">Cancelar</string>
+    <string name="cerrar_boton">Cerrar</string>
 
     # error texts
     <string name="solo_letras">Ingrese solamente letras</string>
     <string name="solo_numeros">Ingrese solamente numeros</string>
     <string name="solo_alphanumerico">Ingrese solamente numeros o letras</string>
-    <string name="mostrar_vuelos_boton">Mostrar vuelos</string>
+
 
 
 </resources>

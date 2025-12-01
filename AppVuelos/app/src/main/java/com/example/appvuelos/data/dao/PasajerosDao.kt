@@ -28,6 +28,9 @@ interface PasajerosDao {
     @Query("DELETE FROM pasajeros WHERE idPasajero = :id")
     suspend fun deleteById(id: Int)
 
+    @Query("SELECT * FROM pasajeros")
+    suspend fun getAll(): List<PasajerosEntity>
+
     // delete all
     @Query("DELETE FROM pasajeros")
     suspend fun deleteAll()

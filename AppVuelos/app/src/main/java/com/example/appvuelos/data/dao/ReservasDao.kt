@@ -24,6 +24,9 @@ interface ReservasDao {
     @Query("DELETE FROM reservas WHERE idReserva = :id")
     suspend fun deleteById(id: Int)
 
+    @Query("SELECT * FROM reservas")
+    suspend fun getAll(): List<ReservasEntity>
+
     @Query("DELETE FROM reservas")
     suspend fun deleteAll()
 }

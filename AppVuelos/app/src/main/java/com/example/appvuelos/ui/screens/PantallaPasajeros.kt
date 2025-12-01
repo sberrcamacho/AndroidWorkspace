@@ -30,11 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appvuelos.R
 import com.example.appvuelos.application.RoomApplication
+import com.example.appvuelos.ui.dialogs.DialogMode
+import com.example.appvuelos.ui.dialogs.PasajerosDialogs
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.White
 import com.example.appvuelos.ui.viewmodel.PasajerosViewModel
 
-enum class DialogMode { NONE, BUSCAR, ELIMINAR, ACTUALIZAR }
+
 
 @Composable
 fun PantallaPasajeros(
@@ -203,19 +205,17 @@ fun PantallaPasajeros(
             BotonCustomizable(
                 text = R.string.agregar_pasajero,
                 onClick = {
-                    if (documento != null && telefono != null ) {
-                        viewModel.addPasajero(
-                            nombre = nombreInput.toValidNameOrUnknown(),
-                            apellido = apellidoInput.toValidNameOrUnknown(),
-                            telefono = telefono,
-                            documento = documento
-                        ) {
-                            nombreInput = ""
-                            apellidoInput = ""
-                            documentoInput = ""
-                            telefonoInput = ""
-                            refreshNextId()
-                        }
+                    viewModel.addPasajero(
+                        nombre = nombreInput.toValidNameOrUnknown(),
+                        apellido = apellidoInput.toValidNameOrUnknown(),
+                        telefono = telefono,
+                        documento = documento
+                    ) {
+                        refreshNextId()
+                        nombreInput = ""
+                        apellidoInput = ""
+                        documentoInput = ""
+                        telefonoInput = ""
                     }
                 },
                 fontSize = fontSize,
@@ -250,68 +250,47 @@ fun PantallaPasajeros(
                 containerColor = DarkRed,
                 modifier = modifier
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            BotonCustomizable(
+                text = R.string.mostrar_todos_pasajeros,
+                onClick = { dialogMode = DialogMode.MOSTRAR_TODOS },
+                fontSize = fontSize,
+                contentColor = White,
+                containerColor = DarkRed,
+                modifier = modifier
+            )
+
+            BotonCustomizable(
+                text = R.string.eliminar_todos_pasajeros,
+                onClick = { dialogMode = DialogMode.ELIMINAR_TODOS },
+                fontSize = fontSize,
+                contentColor = White,
+                containerColor = DarkRed,
+                modifier = modifier
+            )
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        if (dialogMode != DialogMode.NONE) {
-            DialogIdPasajero(
-                title = when(dialogMode) {
-                    DialogMode.ACTUALIZAR -> R.string.actualizar_dialog_id_title
-                    DialogMode.BUSCAR -> R.string.buscar_dialog_id_title
-                    DialogMode.ELIMINAR -> R.string.eliminar_dialog_id_title
-                    DialogMode.NONE -> R.string.none_dialog_id_title
-                },
-                onDismiss = { dialogMode = DialogMode.NONE },
-                onConfirm = { id ->
-                    when(dialogMode) {
-                        DialogMode.BUSCAR -> {
-                            viewModel.getPasajeroById(id) {
-                                it?.let {
-                                    nombreInput = it.nombre
-                                    apellidoInput = it.apellido
-                                    documentoInput = it.documento.toString()
-                                    telefonoInput = it.telefono.toString()
-                                    nextId = it.idPasajero
-                                }
-                            }
-                        }
-                        DialogMode.ELIMINAR -> {
-                            viewModel.deletePasajeroById(id)
-                            refreshNextId()
-                            nombreInput = ""
-                            apellidoInput = ""
-                            documentoInput = ""
-                            telefonoInput = ""
-                        }
-                        DialogMode.ACTUALIZAR -> {
-                            viewModel.getPasajeroById(id) {
-
-
-                                if (documento != null && telefono != null) {
-                                    it?.let {
-                                        viewModel.updatePasajero(
-                                            id = it.idPasajero,
-                                            nombre = nombreInput.toValidNameOrUnknown(),
-                                            apellido = apellidoInput.toValidNameOrUnknown(),
-                                            documento = documento,
-                                            telefono = telefono
-                                        )
-                                        refreshNextId()
-                                        nombreInput = ""
-                                        apellidoInput = ""
-                                        documentoInput = ""
-                                        telefonoInput = ""
-                                    }
-                                }
-                            }
-                        }
-                        else -> {}
-                    }
-                    dialogMode = DialogMode.NONE
-                }
-            )
-        }
+        PasajerosDialogs(
+            dialogMode = dialogMode,
+            viewModel = viewModel,
+            nombreInput = nombreInput,
+            apellidoInput = apellidoInput,
+            documento = documento,
+            telefono = telefono,
+            nextId = nextId,
+            onDismiss = { dialogMode = DialogMode.NONE },
+            onUpdateInputs = { nombre, apellido, doc, tel, id ->
+                nombreInput = nombre
+                apellidoInput = apellido
+                documentoInput = doc
+                telefonoInput = tel
+                nextId = id
+            }
+        )
     }
 }
 

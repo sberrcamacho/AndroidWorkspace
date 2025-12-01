@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.sp
 import com.example.appvuelos.R
 import com.example.appvuelos.application.RoomApplication
 import com.example.appvuelos.data.entities.VuelosEntity
+import com.example.appvuelos.ui.dialogs.DialogMode
+import com.example.appvuelos.ui.dialogs.VuelosDialogs
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.White
 import com.example.appvuelos.ui.viewmodel.VuelosViewModel
@@ -50,7 +52,6 @@ fun PantallaVuelos(
 
     // UI States
     var dialogMode by remember { mutableStateOf(DialogMode.NONE) }
-    var showVuelos by remember { mutableStateOf(false) }
 
     var ciudadOrigen by remember { mutableStateOf("") }
     var ciudadDestino by remember { mutableStateOf("") }
@@ -288,9 +289,20 @@ fun PantallaVuelos(
                 modifier = btnModifier
             )
 
+            Spacer(modifier = Modifier.height(12.dp))
+
             BotonCustomizable(
                 text = R.string.mostrar_vuelos_boton,
-                onClick = { showVuelos = true },
+                onClick = { dialogMode = DialogMode.MOSTRAR_TODOS },
+                fontSize = fontSize,
+                contentColor = White,
+                containerColor = DarkRed,
+                modifier = btnModifier
+            )
+
+            BotonCustomizable(
+                text = R.string.eliminar_todos_boton,
+                onClick = { dialogMode = DialogMode.ELIMINAR_TODOS },
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
@@ -300,69 +312,24 @@ fun PantallaVuelos(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        // dialog para el id
-        if (dialogMode != DialogMode.NONE) {
-            DialogIdPasajero(
-                title = when (dialogMode) {
-                    DialogMode.BUSCAR -> R.string.buscar_dialog_id_title
-                    DialogMode.ACTUALIZAR -> R.string.actualizar_dialog_id_title
-                    DialogMode.ELIMINAR -> R.string.eliminar_dialog_id_title
-                    DialogMode.NONE -> R.string.none_dialog_id_title
-                },
-                onDismiss = { dialogMode = DialogMode.NONE },
-                onConfirm = { id ->
-                    when (dialogMode) {
-                        DialogMode.BUSCAR -> {
-                            viewModel.buscarVuelo(id) { vuelo ->
-                                ciudadOrigen = vuelo[0]
-                                ciudadDestino = vuelo[1]
-                                fechaInput = vuelo[2]
-                                horaInput = vuelo[3]
-                                nextId = vuelo[4].toInt()
-                            }
-                        }
 
-                        DialogMode.ACTUALIZAR -> {
-                            viewModel.updateVuelo(id, ciudadOrigen, ciudadDestino, fechaMillis, horaMillis) {
-                                refreshNextId()
-                                ciudadOrigen = ""
-                                ciudadDestino = ""
-                                fechaInput = ""
-                                horaInput = ""
-                            }
-                        }
-
-                        DialogMode.ELIMINAR -> {
-                            viewModel.deleteVueloById(id) {
-                                refreshNextId()
-                                ciudadOrigen = ""
-                                ciudadDestino = ""
-                                fechaInput = ""
-                                horaInput = ""
-                            }
-                        }
-
-                        else -> {}
-                    }
-                    dialogMode = DialogMode.NONE
-                }
-            )
-        }
-
-        if (showVuelos) {
-            var vuelos by remember { mutableStateOf<List<VuelosEntity>>(emptyList()) }
-
-            LaunchedEffect(Unit) {
-                viewModel.getAllVuelos { lista ->
-                    vuelos = lista
-                }
+        VuelosDialogs(
+            dialogMode = dialogMode,
+            viewModel = viewModel,
+            onDismiss = { dialogMode = DialogMode.NONE },
+            ciudadOrigen = ciudadOrigen,
+            ciudadDestino = ciudadDestino,
+            fechaMillis = fechaMillis,
+            horaMillis = horaMillis,
+            nextId = nextId,
+            onUpdateInputs = { origen, destino, fecha, hora, id ->
+                ciudadOrigen = origen
+                ciudadDestino = destino
+                fechaInput = fecha
+                horaInput = hora
+                nextId = id
             }
-
-            DialogVuelos(
-                onDismiss = { showVuelos = false },
-                vuelos = vuelos
-            )
-        }
+        )
     }
 }
 

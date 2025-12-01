@@ -30,11 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appvuelos.R
 import com.example.appvuelos.application.RoomApplication
+import com.example.appvuelos.ui.dialogs.DialogMode
+import com.example.appvuelos.ui.dialogs.ReservasDialogs
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.White
 import com.example.appvuelos.ui.viewmodel.ReservasViewModel
 
-enum class ReservaDialogMode { NONE, BUSCAR, ELIMINAR, ACTUALIZAR }
 
 @Composable
 fun PantallaReservas(
@@ -51,7 +52,7 @@ fun PantallaReservas(
     }
 
     // dialog mode & inputs
-    var dialogMode by remember { mutableStateOf(ReservaDialogMode.NONE) }
+    var dialogMode by remember { mutableStateOf(DialogMode.NONE) }
 
     var vueloInput by remember { mutableStateOf("") }
     var pasajeroInput by remember { mutableStateOf("") }
@@ -226,7 +227,7 @@ fun PantallaReservas(
             // READ (open dialog to ask for id)
             BotonCustomizable(
                 text = R.string.leer_reserva,
-                onClick = { dialogMode = ReservaDialogMode.BUSCAR },
+                onClick = { dialogMode = DialogMode.BUSCAR },
                 fontSize = btnFontSize,
                 contentColor = White,
                 containerColor = DarkRed,
@@ -236,7 +237,7 @@ fun PantallaReservas(
             // UPDATE (open dialog to ask for id -> populate fields -> user edits -> confirm through same dialog flow)
             BotonCustomizable(
                 text = R.string.actualizar_reserva,
-                onClick = { dialogMode = ReservaDialogMode.ACTUALIZAR },
+                onClick = { dialogMode = DialogMode.ACTUALIZAR },
                 fontSize = btnFontSize,
                 contentColor = White,
                 containerColor = DarkRed,
@@ -246,7 +247,27 @@ fun PantallaReservas(
             // DELETE (open dialog to ask for id)
             BotonCustomizable(
                 text = R.string.eliminar_reserva,
-                onClick = { dialogMode = ReservaDialogMode.ELIMINAR },
+                onClick = { dialogMode = DialogMode.ELIMINAR },
+                fontSize = btnFontSize,
+                contentColor = White,
+                containerColor = DarkRed,
+                modifier = btnModifier
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            BotonCustomizable(
+                text = R.string.mostrar_todos_reservas,
+                onClick = { dialogMode = DialogMode.MOSTRAR_TODOS },
+                fontSize = btnFontSize,
+                contentColor = White,
+                containerColor = DarkRed,
+                modifier = btnModifier
+            )
+
+            BotonCustomizable(
+                text = R.string.eliminar_todos_reservas,
+                onClick = { dialogMode = DialogMode.ELIMINAR_TODOS },
                 fontSize = btnFontSize,
                 contentColor = White,
                 containerColor = DarkRed,
@@ -256,74 +277,22 @@ fun PantallaReservas(
 
         Spacer(modifier = Modifier.height(30.dp))
 
+        ReservasDialogs(
+            dialogMode = dialogMode,
+            viewModel = viewModel,
+            onDismiss = { dialogMode = DialogMode.NONE },
+            idVueloInput = vueloInput.toIntOrNull(),
+            idPasajeroInput = pasajeroInput.toIntOrNull(),
+            asientoInput = asientoInput,
+            nextId = nextId,
+            onUpdateInputs = { idVueloInput, idPasajeroInput, asiento, id ->
+                vueloInput = idVueloInput
+                pasajeroInput = idPasajeroInput
+                asientoInput = asiento
+                nextId = id
+            }
+        )
 
-        // Dialog handling (reuse DialogIdPasajero which expects an id)
-        if (dialogMode != ReservaDialogMode.NONE) {
-            DialogIdPasajero(
-                title = when (dialogMode) {
-                    ReservaDialogMode.ACTUALIZAR -> R.string.actualizar_dialog_id_title
-                    ReservaDialogMode.BUSCAR -> R.string.buscar_dialog_id_title
-                    ReservaDialogMode.ELIMINAR -> R.string.eliminar_dialog_id_title
-                    ReservaDialogMode.NONE -> R.string.none_dialog_id_title
-                },
-                onDismiss = { dialogMode = ReservaDialogMode.NONE },
-                onConfirm = { id ->
-                    when (dialogMode) {
-                        ReservaDialogMode.BUSCAR -> {
-                            viewModel.getReservaById(id) { reserva ->
-                                reserva?.let {
-                                    vueloInput = it.idVuelo.toString()
-                                    pasajeroInput = it.idPasajero.toString()
-                                    asientoInput = it.asiento
-                                    nextId = it.idReserva
-                                }
-                            }
-                        }
-
-                        ReservaDialogMode.ELIMINAR -> {
-                            viewModel.deleteReservaById(id)
-                            refreshNextId()
-                            vueloInput = ""
-                            pasajeroInput = ""
-                            asientoInput = ""
-                        }
-
-                        ReservaDialogMode.ACTUALIZAR -> {
-                            // first fetch the reserva to ensure it exists and get its idReserva
-                            viewModel.getReservaById(id) { reserva ->
-                                reserva?.let {
-                                    // validate current inputs before updating
-                                    val validVuelo = vueloInput.isNotBlank() && vueloInt != null
-                                    val validPasajero = pasajeroInput.isNotBlank() && pasajeroInt != null
-                                    val validAsiento = asientoInput.isNotBlank()
-
-                                    vueloError = !validVuelo
-                                    pasajeroError = !validPasajero
-                                    asientoError = !validAsiento
-
-                                    if (validVuelo && validPasajero && validAsiento) {
-                                        viewModel.updateReserva(
-                                            idReserva = it.idReserva,
-                                            idVuelo = vueloInt,
-                                            idPasajero = pasajeroInt,
-                                            asiento = asientoInput.trim()
-                                        )
-                                        // reset fields and refresh id
-                                        vueloInput = ""
-                                        pasajeroInput = ""
-                                        asientoInput = ""
-                                        refreshNextId()
-                                    }
-                                }
-                            }
-                        }
-
-                        else -> {}
-                    }
-                    dialogMode = ReservaDialogMode.NONE
-                }
-            )
-        }
     }
 }
 

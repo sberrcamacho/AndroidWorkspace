@@ -48,6 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
@@ -287,65 +288,7 @@ fun AbrirTimePicker(
     }
 }
 
-@Composable
-fun DialogIdPasajero(
-    onDismiss: () -> Unit,
-    onConfirm: (Int) -> Unit,
-    @StringRes title: Int,
-) {
-    var idInput by remember { mutableStateOf("") }
-    var idError by remember { mutableStateOf(false) }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(title)) },
-        text = {
-            val keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number
-            )
-
-            val shape = 12.dp
-            val fontSize = 22.sp
-            val modifier = Modifier
-                .height(64.dp)
-
-            EntradaDeTexto(
-                value = idInput,
-                onValueChange = { idInput = it ; idError = it.isBlank() || !it.all { char -> char.isDigit() } },
-                label = R.string.id_label,
-                icon = R.drawable.id_card_48dp_ffffff_fill0_wght400_grad0_opsz48,
-                keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Next),
-                shape = shape,
-                fontSize = fontSize,
-                fontSizeInput = fontSize,
-                isError = idError,
-                textError = R.string.solo_numeros,
-                modifier = modifier
-            )
-
-        },
-        confirmButton = {
-            BotonCustomizable(
-                text = R.string.confirmar_boton_datapicker,
-                onClick = {
-                    onConfirm(idInput.toIntOrNull() ?: 0)
-                },
-                fontSize = 14.sp,
-                contentColor = White,
-                containerColor = DarkRed
-            )
-        },
-        dismissButton = {
-            BotonCustomizable(
-                text = R.string.cancelar_boton_datapicker,
-                onClick = { onDismiss() },
-                fontSize = 14.sp,
-                contentColor = White,
-                containerColor = DarkRed
-            )
-        }
-    )
-}
 
 fun Long.toFormattedDateString(): String {
     val localDate = Instant.ofEpochMilli(this)
@@ -431,48 +374,10 @@ fun CampoID(
     )
 }
 
-@Composable
-fun DialogVuelos(
-    onDismiss: () -> Unit,
-    vuelos: List<VuelosEntity>
-) {
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Lista de Vuelos") },
-        text = {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                // Encabezado
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text("ID", modifier = Modifier.weight(0.8f))
-                    Text("Origen", modifier = Modifier.weight(2f))
-                    Text("Destino", modifier = Modifier.weight(2f))
-                    Text("Fecha", modifier = Modifier.weight(2f))
-                    Text("Hora", modifier = Modifier.weight(1.2f))
-                    }
-                Divider(modifier = Modifier.padding(vertical = 4.dp))
-                // Filas de datos
-                LazyColumn(modifier = Modifier.height(220.dp)) {
-                    items(vuelos) { vuelo ->
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(vuelo.idVuelo.toString(), modifier = Modifier.weight(0.8f))
-                            Text(vuelo.origen, modifier = Modifier.weight(2f))
-                            Text(vuelo.destino, modifier = Modifier.weight(2f))
-                            Text(vuelo.fecha.toFormattedShortDateString(), modifier = Modifier.weight(2f))
-                            Text(vuelo.hora.toFormattedShortHour(), modifier = Modifier.weight(1.2f))
-                        }
-                        Divider(modifier = Modifier.padding(vertical = 4.dp))
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cerrar")
-            }
-        }
-    )
-}
+
+
+
 
 
 

@@ -105,4 +105,11 @@ class VuelosViewModel(private val vuelosDao: VuelosDao): ViewModel() {
         }
     }
 
+    fun deleteAllVuelos(onComplete: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            vuelosDao.deleteAll()
+            onComplete?.invoke()
+        }
+    }
+
 }

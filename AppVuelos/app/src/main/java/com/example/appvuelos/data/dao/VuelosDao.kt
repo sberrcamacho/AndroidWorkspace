@@ -32,9 +32,4 @@ interface VuelosDao {
     @Query("DELETE FROM vuelos")
     suspend fun deleteAll()
 
-
-
-
-
-
 }
