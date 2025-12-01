@@ -1,16 +1,18 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.appvuelos.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -18,20 +20,28 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.TimePickerDialog
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -39,9 +49,12 @@ import androidx.compose.ui.unit.sp
 import com.example.appvuelos.R
 import com.example.appvuelos.ui.theme.DarkGray
 import com.example.appvuelos.ui.theme.DarkRed
+import com.example.appvuelos.ui.theme.Orange
 import com.example.appvuelos.ui.theme.White
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -78,24 +91,45 @@ fun EntradaDeTexto(
     shape: Dp,
     readOnly: Boolean = false,
     enabled: Boolean = true,
+    isError: Boolean = false,
+    @StringRes textError: Int = R.string.solo_letras,
     modifier: Modifier = Modifier
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        enabled = enabled,
-        readOnly = readOnly,
-        leadingIcon = { Icon(painterResource(icon), null, modifier = Modifier.scale(1.4F)) },
-        placeholder = { Text(text = stringResource(label), fontSize = fontSize) },
-        keyboardOptions = keyboardOptions,
-        singleLine = true,
-        shape = RoundedCornerShape(shape),
-        textStyle = TextStyle(
-            fontSize = fontSizeInput,
-            color = Color.Black
-        ),
-        modifier = modifier
-    )
+    Column {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            enabled = enabled,
+            readOnly = readOnly,
+            leadingIcon = { Icon(painterResource(icon), null, modifier = Modifier.scale(1.4F)) },
+            placeholder = { Text(text = stringResource(label), fontSize = fontSize) },
+            keyboardOptions = keyboardOptions,
+            singleLine = true,
+            shape = RoundedCornerShape(shape),
+            textStyle = TextStyle(
+                fontSize = fontSizeInput,
+            ),
+            isError = isError,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Black,
+                focusedLabelColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                errorIndicatorColor = Orange,
+                errorLabelColor = Orange,
+                errorTextColor = Orange
+            ),
+            modifier = modifier
+        )
+
+        if (isError) {
+            Text(
+                text = stringResource(textError),
+                color = Orange,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
 }
 
 @Composable
@@ -103,39 +137,24 @@ fun BotonRegresar(
     toRegresar: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Button (
-            onClick = { toRegresar(1) },
-            modifier = modifier
-                .scale(0.8F),
-            colors = ButtonDefaults.buttonColors(
-                contentColor = White,
-                containerColor = DarkRed
-            )
-        ) {
-        Row {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = null,
-                tint = White,
-                modifier = Modifier.size(24.dp)
-            )
-
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Text(
-                text = stringResource(R.string.regresar_boton),
-                color = White,
-                fontSize = 22.sp
-            )
-        }
-        }
+    IconButton(
+        onClick = { toRegresar(1) },
+        modifier = modifier.scale(0.9f)
+    ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = null,
+            tint = DarkGray,
+            modifier = Modifier.size(32.dp)
+        )
+    }
 }
 
 @Composable
 fun AbrirDatePicker(
     show: Boolean,
     onDismiss: () -> Unit,
-    onDateSelected: (String) -> Unit
+    onDateSelected: (Long) -> Unit
 ) {
     if (!show) return
 
@@ -153,19 +172,8 @@ fun AbrirDatePicker(
                 onClick = {
                     val date = dataPickerState.selectedDateMillis
                     date?.let {
-                        val localDate = Instant.ofEpochMilli(it).atZone(ZoneId.of("UTC")).toLocalDate()
-
-                        val day = localDate.dayOfMonth
-                        val month = localDate.format(DateTimeFormatter.ofPattern("MMMM",
-                            Locale("es")
-                        ))
-                            .replaceFirstChar { char -> char.uppercase() }
-                        val year = localDate.year
-
-                        val formatDate = "$month $day, $year"
-                        onDateSelected(formatDate)
+                        onDateSelected(date)
                     }
-
                     onDismiss()
                 },
                 fontSize = fontSize,
@@ -202,7 +210,7 @@ fun AbrirDatePicker(
 fun AbrirTimePicker(
     show: Boolean,
     onDismiss: () -> Unit,
-    hourSelected: (String) -> Unit
+    hourSelected: (Long) -> Unit
 ) {
     if (!show) return
 
@@ -228,20 +236,13 @@ fun AbrirTimePicker(
                         val hour = timePickerState.hour
                         val minute = timePickerState.minute
 
-                        val period = if (hour < 12) "AM" else "PM"
+                        val millis = LocalTime.of(hour, minute)
+                            .atDate(LocalDate.of(1970, 1, 1)) // es la fecha base para programas
+                            .atZone(ZoneId.systemDefault())
+                            .toInstant()
+                            .toEpochMilli()
 
-                        val hour12 = when {
-                            hour == 0 -> 12
-                            hour > 12 -> hour - 12
-                            else -> hour
-                        }
-
-                        val formattedHour = hour12.toString().padStart(2, '0')
-                        val formattedMinute = minute.toString().padStart(2, '0')
-
-                        val selected = "$formattedHour:$formattedMinute $period"
-
-                        hourSelected(selected)
+                        hourSelected(millis)
                         onDismiss()
                     },
                     fontSize = fontSize,
@@ -274,7 +275,107 @@ fun AbrirTimePicker(
     }
 }
 
+@Composable
+fun DialogIdPasajero(
+    onDismiss: () -> Unit,
+    onConfirm: (Int) -> Unit,
+    @StringRes title: Int,
+) {
+    var idInput by remember { mutableStateOf("") }
+    var idError by remember { mutableStateOf(false) }
 
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(title)) },
+        text = {
+            val keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number
+            )
+
+            val shape = 12.dp
+            val fontSize = 22.sp
+            val modifier = Modifier
+                .height(64.dp)
+
+            EntradaDeTexto(
+                value = idInput,
+                onValueChange = { idInput = it ; idError = it.isBlank() || !it.all { char -> char.isDigit() } },
+                label = R.string.id_label,
+                icon = R.drawable.id_card_48dp_ffffff_fill0_wght400_grad0_opsz48,
+                keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Next),
+                shape = shape,
+                fontSize = fontSize,
+                fontSizeInput = fontSize,
+                isError = idError,
+                textError = R.string.solo_numeros,
+                modifier = modifier
+            )
+
+        },
+        confirmButton = {
+            BotonCustomizable(
+                text = R.string.confirmar_boton_datapicker,
+                onClick = {
+                    onConfirm(idInput.toIntOrNull() ?: 0)
+                },
+                fontSize = 14.sp,
+                contentColor = White,
+                containerColor = DarkRed
+            )
+        },
+        dismissButton = {
+            BotonCustomizable(
+                text = R.string.cancelar_boton_datapicker,
+                onClick = { onDismiss() },
+                fontSize = 14.sp,
+                contentColor = White,
+                containerColor = DarkRed
+            )
+        }
+    )
+}
+
+fun String.toValidNameOrUnknown(): String {
+    val trimmed = this.trim()
+
+    return if (trimmed.isNotEmpty() && trimmed.all { it.isLetter() }) {
+        trimmed
+    } else {
+        "Unknown"
+    }
+}
+
+
+@Composable
+fun CampoID(
+    label: String,
+    icon: Int,
+    modifier: Modifier = Modifier
+) {
+    // Colores iguales a tus OutlinedTextField
+    val colors = TextFieldDefaults.colors(
+        unfocusedContainerColor = Color(0xFFE5E5E5),
+        focusedContainerColor = Color(0xFFE5E5E5),
+        disabledContainerColor = Color(0xFFE5E5E5),
+        disabledTextColor = Color.Black,
+    )
+
+    OutlinedTextField(
+        value = label,
+        onValueChange = {},
+        readOnly = true,
+        enabled = false,
+        leadingIcon = { Icon(painterResource(icon), null, modifier = Modifier.scale(0.9F)) },
+        placeholder = null,
+        shape = RoundedCornerShape(24.dp),
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            color = Color.Black
+        ),
+        colors = colors,
+        modifier = modifier.height(50.dp)
+    )
+}
 
 
 

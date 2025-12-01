@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,17 +36,31 @@ fun MenuApp(
             .background(White)
             .padding(28.dp)
             .wrapContentSize(Alignment.TopCenter)
+            .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = modifier.height(90.dp))
+        Spacer(modifier = modifier.height(48.dp))
 
         Text(
-            text = stringResource(R.string.menu_titulo),
-            fontSize = 38.sp,
-            color = DarkRed,
-            fontWeight = FontWeight.Bold
+            text = "Bienvenido a Pigeon Airlines",
+            style = MaterialTheme.typography.displaySmall.copy(
+                color = DarkRed,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = modifier.padding(bottom = 20.dp)
         )
 
-        Spacer(modifier = modifier.height(80.dp))
+        Text(
+            text = "Desde este panel podrá gestionar de manera organizada las principales funciones del sistema.\n" +
+                    "En la sección Vuelos encontrará las rutas disponibles, junto con sus horarios y detalles correspondientes.\n" +
+                    "El apartado Pasajeros le permitirá registrar, actualizar o consultar la información de cada viajero.\n" +
+                    "Finalmente, en Reservas podrá crear nuevas solicitudes, modificar registros existentes o verificar asientos asignados.\n" +
+                    "\n" +
+                    "Gracias por utilizar nuestros servicios. Su experiencia comienza aquí.",
+
+            style = MaterialTheme.typography.bodyLarge.copy()
+        )
+
+        Spacer(modifier = modifier.height(68.dp))
 
         val modifier = Modifier
             .height(82.dp)

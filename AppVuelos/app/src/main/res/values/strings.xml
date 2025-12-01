@@ -22,6 +22,7 @@
 
     # pantalla pasajeros
     <string name="id_vuelos_text">ID: %s</string>
+    <string name="id_label">ID</string>
     <string name="nombre_label">Nombre</string>
     <string name="apellido_label">Apellido</string>
     <string name="documento_label">Documento</string>
@@ -30,22 +31,29 @@
     <string name="buscar_pasajero">Buscar pasajero</string>
     <string name="actualizar_pasajero">Actualizar datos</string>
     <string name="eliminar_pasajero">Eliminar pasajero</string>
-    
+
+    <string name="buscar_dialog_id_title">Ingrese el ID a buscar</string>
+    <string name="actualizar_dialog_id_title">Ingrese el ID a actualizar</string>
+    <string name="eliminar_dialog_id_title">Ingrese el ID a eliminar</string>
+    <string name="none_dialog_id_title">Invalido</string>
+
     # pantalla reservas
     <string name="vuelo_id_label">Vuelo ID</string>
     <string name="pasajero_id_label">Pasajero ID</string>
-    <string name="asientos_label">Asientos</string>
+    <string name="asiento_label">Asiento</string>
     <string name="agregar_reserva">Añadir reserva</string>
     <string name="leer_reserva">Leer reserva</string>
     <string name="actualizar_reserva">Actualizar reserva</string>
     <string name="eliminar_reserva">Eliminar reserva</string>
 
-    # boton regresar
-    <string name="regresar_boton">Regresar al menú</string>
-
     # Data picker
     <string name="confirmar_boton_datapicker">Confirmar</string>
     <string name="cancelar_boton_datapicker">Cancelar</string>
+
+    # error texts
+    <string name="solo_letras">Ingrese solamente letras</string>
+    <string name="solo_numeros">Ingrese solamente numeros</string>
+    <string name="solo_alphanumerico">Ingrese solamente numeros o letras</string>
 
 
 </resources>

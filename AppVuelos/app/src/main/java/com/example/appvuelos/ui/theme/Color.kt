@@ -9,4 +9,4 @@ val LightGray = Color(0xFFEFEFEF)
 
 val OtherWhite = Color(0xFFFEFDFB)
 val DarkGray = Color(0xFF40454B)
-val Periwinkle = Color(0xFFD5D5DD)
+val Orange = Color(0xFFFF911E)

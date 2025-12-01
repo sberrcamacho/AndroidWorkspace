@@ -1,13 +1,11 @@
 package com.example.appvuelos.ui.screens
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,10 +13,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,19 +28,50 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appvuelos.R
-import com.example.appvuelos.ui.theme.DarkGray
+import com.example.appvuelos.application.RoomApplication
 import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.White
+import com.example.appvuelos.ui.viewmodel.VuelosViewModel
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun PantallaVuelos(
     modifier: Modifier = Modifier,
     toRegresar: (Int) -> Unit
 ) {
+    val viewModel = remember { VuelosViewModel(RoomApplication.db.vuelosDao()) }
+
+    // UI States
+    var dialogMode by remember { mutableStateOf(DialogMode.NONE) }
+
+    var ciudadOrigen by remember { mutableStateOf("") }
+    var ciudadDestino by remember { mutableStateOf("") }
+    var fechaInput by remember { mutableStateOf("") }
+    var horaInput by remember { mutableStateOf("") }
+
+    var ciudadOrigenError by remember { mutableStateOf(false) }
+    var ciudadDestinoError by remember { mutableStateOf(false) }
+
+    var fechaMillis by remember { mutableStateOf<Long?>(null) }
+    var horaMillis by remember { mutableStateOf<Long?>(null) }
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    var showHourPicker by remember { mutableStateOf(false) }
+
+    var nextId by remember { mutableIntStateOf(1) }
+
+    fun refreshNextId() {
+        viewModel.getNextVueloId { nextId = it }
+    }
+
+    LaunchedEffect(Unit) { refreshNextId() }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -49,73 +80,84 @@ fun PantallaVuelos(
             .wrapContentSize(Alignment.TopCenter)
             .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = modifier.height(46.dp))
+        Spacer(modifier = Modifier.height(30.dp))
+
+        BotonRegresar(
+            toRegresar = { toRegresar(1) },
+            modifier = Modifier.align(Alignment.Start).padding(bottom = 20.dp)
+        )
 
         Text(
-            text = stringResource(R.string.vuelos_boton_menu),
-            fontSize = 38.sp,
-            color = DarkRed,
-            fontWeight = FontWeight.Bold
+            text = "Gestión de Vuelos",
+            style = MaterialTheme.typography.displaySmall.copy(
+                color = DarkRed,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.align(Alignment.Start)
+        )
+
+
+        Text(
+            text = "En este módulo podrá administrar toda la información relacionada con los vuelos disponibles.\n" +
+                    "Aquí es posible registrar nuevos vuelos, actualizar datos existentes y consultar rutas programadas.\n" +
+                    "Introduzca cuidadosamente los datos requeridos, como ciudad de origen, ciudad de destino, fecha y hora, para garantizar un control preciso de las operaciones.\n" +
+                    "\n" +
+                    "Utilice esta sección para mantener actualizada la información que permitirá una adecuada coordinación del servicio aéreo.",
+            style = MaterialTheme.typography.bodyLarge.copy(),
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(top = 20.dp)
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Text(
-            text = stringResource(R.string.id_vuelos_text,"1"),
-            fontSize = 22.sp,
-            color = DarkGray,
+        CampoID(
+            label = stringResource(R.string.id_vuelos_text, nextId),
+            icon = R.drawable.airplane_ticket_48dp_ffffff_fill1_wght400_grad0_opsz48,
             modifier = Modifier
                 .align(Alignment.Start)
+                .fillMaxWidth(0.5F)
                 .padding(bottom = 20.dp, start = 20.dp)
         )
 
-        var showDatePicker by remember { mutableStateOf(false) }
-        var showHourPicker by remember { mutableStateOf(false) }
-
-        var fechaInput by remember { mutableStateOf("") }
-        var horaInput by remember { mutableStateOf("") }
-
-        Column (
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ){
+        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
 
             val shape = 12.dp
             val fontSize = 22.sp
-            val modifier = Modifier
+            val inputModifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp)
 
-            var ciudadOrigenInput by remember { mutableStateOf("") }
-            var ciudadDestinoInput by remember { mutableStateOf("") }
-
-
-
             EntradaDeTexto(
-                value = ciudadOrigenInput,
-                onValueChange = { ciudadOrigenInput = it },
+                value = ciudadOrigen,
+                onValueChange = { ciudadOrigen = it ; ciudadOrigenError = it.isEmpty() || !it.all { c -> c.isLetter() }},
                 label = R.string.ciudad_de_origen_label,
                 icon = R.drawable.flight_takeoff_48dp_ffffff_fill0_wght400_grad0_opsz48,
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                isError = ciudadOrigenError,
+                textError = R.string.solo_letras,
                 shape = shape,
                 fontSize = fontSize,
                 fontSizeInput = fontSize,
-                modifier = modifier
+                modifier = inputModifier
             )
+
             EntradaDeTexto(
-                value = ciudadDestinoInput,
-                onValueChange = { ciudadDestinoInput = it },
+                value = ciudadDestino,
+                onValueChange = { ciudadDestino = it ; ciudadDestinoError = it.isEmpty() || !it.all { c -> c.isLetter() } },
                 label = R.string.ciudad_de_destino_label,
                 icon = R.drawable.flight_land_48dp_ffffff_fill0_wght400_grad0_opsz48,
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
                 shape = shape,
+                isError = ciudadDestinoError,
+                textError = R.string.solo_letras,
                 fontSize = fontSize,
                 fontSizeInput = fontSize,
-                modifier = modifier
+                modifier = inputModifier
             )
 
-            Box(
-                modifier = modifier
-            ) {
+            // fecha
+            Box(modifier = inputModifier) {
                 EntradaDeTexto(
                     value = fechaInput,
                     onValueChange = {},
@@ -123,26 +165,21 @@ fun PantallaVuelos(
                     icon = R.drawable.date_range_48dp_ffffff_fill0_wght400_grad0_opsz48,
                     shape = shape,
                     readOnly = true,
-                    enabled = true,
                     fontSize = fontSize,
                     fontSizeInput = fontSize,
-                    modifier = modifier
+                    enabled = true,
+                    modifier = inputModifier
                 )
 
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .pointerInput(Unit) {
-                            detectTapGestures {
-                                showDatePicker = true
-                            }
-                        }
+                        .pointerInput(Unit) { detectTapGestures { showDatePicker = true } }
                 )
             }
 
-            Box(
-                modifier = modifier
-            ) {
+            // hora
+            Box(modifier = inputModifier) {
                 EntradaDeTexto(
                     value = horaInput,
                     onValueChange = {},
@@ -153,41 +190,46 @@ fun PantallaVuelos(
                     fontSizeInput = fontSize,
                     readOnly = true,
                     enabled = true,
-                    modifier = modifier
+                    modifier = inputModifier
                 )
 
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .pointerInput(Unit) {
-                            detectTapGestures {
-                                showHourPicker = true
-                            }
-                        }
+                        .pointerInput(Unit) { detectTapGestures { showHourPicker = true } }
                 )
             }
         }
 
-
+        // data picker
         AbrirDatePicker(
             show = showDatePicker,
             onDismiss = { showDatePicker = false },
-            onDateSelected = { fechaInput = it }
+            onDateSelected = {
+                fechaMillis = it
+                fechaInput = it.toFormattedDateString()
+            }
         )
 
+        // lo mismo time picker
         AbrirTimePicker(
             show = showHourPicker,
             onDismiss = { showHourPicker = false },
-            hourSelected = { horaInput = it }
+            hourSelected = {
+                horaMillis = it
+                horaInput = it.toFormattedHour()
+            }
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Column (
+        // aqui se encuentra el crud
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
-        ){
-            val modifier = Modifier
+        ) {
+
+            val btnModifier = Modifier
                 .fillMaxWidth()
                 .height(58.dp)
 
@@ -195,56 +237,137 @@ fun PantallaVuelos(
 
             BotonCustomizable(
                 text = R.string.agregar_vuelo_boton,
-                onClick = {},
+                onClick = {
+                    if (fechaMillis != null && horaMillis != null) {
+                        viewModel.addVuelo(
+                            ciudadOrigen.toValidNameOrUnknown(),
+                            ciudadDestino.toValidNameOrUnknown(),
+                            fechaMillis!!,
+                            horaMillis!!
+                        ) {
+                            ciudadOrigen = ""
+                            ciudadDestino = ""
+                            fechaInput = ""
+                            horaInput = ""
+                            refreshNextId()
+                        }
+                    }
+                },
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
-                modifier = modifier
+                modifier = btnModifier
             )
 
             BotonCustomizable(
                 text = R.string.traer_vuelo_boton,
-                onClick = {},
+                onClick = { dialogMode = DialogMode.BUSCAR },
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
-                modifier = modifier
+                modifier = btnModifier
             )
 
             BotonCustomizable(
                 text = R.string.actualizar_vuelo_boton,
-                onClick = {},
+                onClick = { dialogMode = DialogMode.ACTUALIZAR },
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
-                modifier = modifier
+                modifier = btnModifier
             )
 
             BotonCustomizable(
                 text = R.string.eliminar_vuelo_boton,
-                onClick = {},
+                onClick = { dialogMode = DialogMode.ELIMINAR },
                 fontSize = fontSize,
                 contentColor = White,
                 containerColor = DarkRed,
-                modifier = modifier
+                modifier = btnModifier
             )
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        BotonRegresar(
-            toRegresar = { toRegresar(1) },
-            modifier = Modifier.align(Alignment.Start)
-        )
+        // dialog para el id
+        if (dialogMode != DialogMode.NONE) {
+            DialogIdPasajero(
+                title = when (dialogMode) {
+                    DialogMode.BUSCAR -> R.string.buscar_dialog_id_title
+                    DialogMode.ACTUALIZAR -> R.string.actualizar_dialog_id_title
+                    DialogMode.ELIMINAR -> R.string.eliminar_dialog_id_title
+                    DialogMode.NONE -> R.string.none_dialog_id_title
+                },
+                onDismiss = { dialogMode = DialogMode.NONE },
+                onConfirm = { id ->
+                    when (dialogMode) {
+                        DialogMode.BUSCAR -> {
+                            viewModel.getVueloById(id) { vuelo ->
+                                vuelo?.let {
+                                    ciudadOrigen = it.ciudadOrigen
+                                    ciudadDestino = it.ciudadDestino
+                                    fechaInput = it.fecha.toFormattedDateString()
+                                    horaInput = it.hora.toFormattedHour()
+                                    nextId = it.idVuelo
+                                }
+                            }
+                        }
+
+                        DialogMode.ACTUALIZAR -> {
+                            viewModel.getVueloById(id) { vuelo ->
+                                vuelo?.let {
+                                    if (fechaMillis != null && horaMillis != null) {
+                                        viewModel.updateVuelo(
+                                            idVuelo = it.idVuelo,
+                                            ciudadOrigen = ciudadOrigen.toValidNameOrUnknown(),
+                                            ciudadDestino = ciudadDestino.toValidNameOrUnknown(),
+                                            fecha = fechaMillis!!,
+                                            hora = horaMillis!!
+                                        )
+
+                                        ciudadOrigen = ""
+                                        ciudadDestino = ""
+                                        fechaInput = ""
+                                        horaInput = ""
+                                        refreshNextId()
+                                    }
+                                }
+                            }
+                        }
+
+                        DialogMode.ELIMINAR -> {
+                            viewModel.deleteVueloById(id)
+                            refreshNextId()
+                        }
+
+                        else -> {}
+                    }
+                    dialogMode = DialogMode.NONE
+                }
+            )
+        }
     }
 }
 
-@Preview(showBackground = false)
-@Composable
-fun preview() {
-    Surface(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        PantallaVuelos() { }
-    }
+private fun Long.toFormattedDateString(): String {
+    val localDate = Instant.ofEpochMilli(this)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate()
+
+    val formatter = DateTimeFormatter.ofPattern(
+        "MMMM d, yyyy",
+        Locale("es")
+    )
+
+    val formatted = localDate.format(formatter)
+    return formatted.replaceFirstChar { it.uppercase() }
+}
+
+private fun Long.toFormattedHour(): String {
+    val time = Instant.ofEpochMilli(this)
+        .atZone(ZoneId.systemDefault())
+        .toLocalTime()
+
+    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+    return time.format(formatter)
 }
