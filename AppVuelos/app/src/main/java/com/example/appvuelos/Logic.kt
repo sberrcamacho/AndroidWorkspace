@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.appvuelos.ui.screens.MenuApp
+import com.example.appvuelos.ui.screens.PantallaAyuda
 import com.example.appvuelos.ui.screens.PantallaPasajeros
 import com.example.appvuelos.ui.screens.PantallaPrincipal
 import com.example.appvuelos.ui.screens.PantallaReservas
@@ -22,5 +23,6 @@ fun Logic() {
         2 -> PantallaVuelos { screen = it }
         3 -> PantallaPasajeros { screen = it }
         4 -> PantallaReservas { screen = it }
+        5 -> PantallaAyuda { screen = it }
     }
 }

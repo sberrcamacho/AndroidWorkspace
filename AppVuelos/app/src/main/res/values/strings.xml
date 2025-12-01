@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">App Vuelos</string>
+    <string name="app_name">Pigeon Airlines</string>
 
     # pantalla inicial
     <string name="entrar_boton">Entrar</string>
@@ -9,6 +9,7 @@
     <string name="vuelos_boton_menu">Vuelos</string>
     <string name="pasajeros_boton_menu">Pasajeros</string>
     <string name="reservas_boton_menu">Reservas</string>
+    <string name="ayuda_boton_menu">Guía</string>
 
     # pantalla vuelos
     <string name="ciudad_de_origen_label">Ciudad de origen</string>
@@ -61,7 +62,5 @@
     <string name="solo_letras">Ingrese solamente letras</string>
     <string name="solo_numeros">Ingrese solamente numeros</string>
     <string name="solo_alphanumerico">Ingrese solamente numeros o letras</string>
-
-
 
 </resources>

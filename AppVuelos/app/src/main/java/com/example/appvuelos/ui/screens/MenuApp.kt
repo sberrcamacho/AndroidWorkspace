@@ -96,6 +96,15 @@ fun MenuApp(
                 modifier = modifier
             )
 
+            BotonCustomizable(
+                text = R.string.ayuda_boton_menu,
+                onClick = { to(5) },
+                fontSize = 32.sp,
+                contentColor = Color.Black,
+                containerColor = LightGray,
+                modifier = modifier
+            )
+
         }
     }
 }
