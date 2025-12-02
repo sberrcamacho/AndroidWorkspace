@@ -18,7 +18,11 @@ interface ReservasDao {
     @Query("SELECT * FROM reservas WHERE idReserva = :id")
     suspend fun getById(id: Int): ReservasEntity?
 
-    @Query("SELECT MAX(idReserva) FROM reservas")
+    @Query("""
+        SELECT seq 
+        FROM sqlite_sequence 
+        WHERE name = 'reservas'
+    """)
     suspend fun getLastReservaId(): Int?
 
     @Query("DELETE FROM reservas WHERE idReserva = :id")

@@ -6,23 +6,22 @@ import com.example.appvuelos.data.dao.VuelosDao
 import com.example.appvuelos.data.entities.VuelosEntity
 import com.example.appvuelos.ui.screens.toFormattedDateString
 import com.example.appvuelos.ui.screens.toFormattedHour
-import com.example.appvuelos.ui.screens.toValidNameOrUnknown
 import kotlinx.coroutines.launch
 
 class VuelosViewModel(private val vuelosDao: VuelosDao): ViewModel() {
 
     fun addVuelo(
-        origen: String,
-        destino: String,
+        origen: String?,
+        destino: String?,
         fecha: Long?,
         hora: Long?,
         onComplete: (() -> Unit)? = null
     ) {
         viewModelScope.launch {
-            if (fecha != null && hora != null) {
+            if (fecha != null && hora != null && origen != null && destino != null) {
                 val vueloEntity = VuelosEntity(
-                    origen = origen.toValidNameOrUnknown(),
-                    destino = destino.toValidNameOrUnknown(),
+                    origen = origen,
+                    destino = destino,
                     fecha = fecha,
                     hora = hora
                 )
@@ -36,20 +35,20 @@ class VuelosViewModel(private val vuelosDao: VuelosDao): ViewModel() {
 
     fun updateVuelo(
         idVuelo: Int,
-        origen: String,
-        destino: String,
+        origen: String?,
+        destino: String?,
         fecha: Long?,
         hora: Long?,
         onComplete: (() -> Unit)? = null
     ) {
         getVueloById(idVuelo) { vuelo ->
             vuelo?.let {
-                if (fecha != null && hora != null) {
+                if (fecha != null && hora != null && origen != null && destino != null) {
                     viewModelScope.launch {
                         val vuelosEntity = VuelosEntity(
                             idVuelo = it.idVuelo,
-                            origen = origen.toValidNameOrUnknown(),
-                            destino = destino.toValidNameOrUnknown(),
+                            origen = origen,
+                            destino = destino,
                             fecha = fecha,
                             hora = hora
                         )

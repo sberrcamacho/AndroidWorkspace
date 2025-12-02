@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Art Space</string>
+
+    # The starry night
+    <string name="starry_night_title">The Starry Night</string>
+    <string name="starry_night_author">Vincent Van Gogh</string>
+    <string name="starry_night_year">1889</string>
+
+    # The persistence of Memory
+    <string name="persistence_memory_title">The Persistence of Memory</string>
+    <string name="persistence_memory_author">Salvador Dalí</string>
+    <string name="persistence_memory_year">1931</string>
+
+    # The scream
+    <string name="the_scream_title">The Scream</string>
+    <string name="the_scream_author">Edvard Munch</string>
+    <string name="the_scream_year">1893</string>
+</resources>

@@ -54,6 +54,8 @@ fun PantallaPasajeros(
     var documentoInput by remember { mutableStateOf("") }
     var telefonoInput by remember { mutableStateOf("") }
 
+    val nombreValid = nombreInput.toValidNameOrNull()
+    val apellidoValid = apellidoInput.toValidNameOrNull()
     val documento = documentoInput.toIntOrNull()
     val telefono = telefonoInput.toIntOrNull()
 
@@ -206,8 +208,8 @@ fun PantallaPasajeros(
                 text = R.string.agregar_pasajero,
                 onClick = {
                     viewModel.addPasajero(
-                        nombre = nombreInput.toValidNameOrUnknown(),
-                        apellido = apellidoInput.toValidNameOrUnknown(),
+                        nombre = nombreValid,
+                        apellido = apellidoValid,
                         telefono = telefono,
                         documento = documento
                     ) {
@@ -277,8 +279,8 @@ fun PantallaPasajeros(
         PasajerosDialogs(
             dialogMode = dialogMode,
             viewModel = viewModel,
-            nombreInput = nombreInput,
-            apellidoInput = apellidoInput,
+            nombreInput = nombreValid,
+            apellidoInput = apellidoValid,
             documento = documento,
             telefono = telefono,
             nextId = nextId,

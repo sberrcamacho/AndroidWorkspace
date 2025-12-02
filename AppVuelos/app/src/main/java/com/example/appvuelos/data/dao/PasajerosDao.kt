@@ -22,7 +22,11 @@ interface PasajerosDao {
     @Query("SELECT * FROM pasajeros WHERE idPasajero = :id")
     suspend fun getById(id: Int): PasajerosEntity?
 
-    @Query("SELECT MAX(idPasajero) FROM pasajeros")
+    @Query("""
+        SELECT seq 
+        FROM sqlite_sequence 
+        WHERE name = 'pasajeros'
+    """)
     suspend fun getLastPasajeroId(): Int?
 
     @Query("DELETE FROM pasajeros WHERE idPasajero = :id")

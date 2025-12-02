@@ -61,6 +61,9 @@ fun PantallaVuelos(
     var ciudadOrigenError by remember { mutableStateOf(false) }
     var ciudadDestinoError by remember { mutableStateOf(false) }
 
+    val ciudadOrigenValid = ciudadOrigen.toValidNameOrNull()
+    val ciudadDestinoValid = ciudadDestino.toValidNameOrNull()
+
     var fechaMillis by remember { mutableStateOf<Long?>(null) }
     var horaMillis by remember { mutableStateOf<Long?>(null) }
 
@@ -244,8 +247,8 @@ fun PantallaVuelos(
                 text = R.string.agregar_vuelo_boton,
                 onClick = {
                     viewModel.addVuelo(
-                        ciudadOrigen,
-                        ciudadDestino,
+                        ciudadOrigenValid,
+                        ciudadDestinoValid,
                         fechaMillis,
                         horaMillis
                     ) {
@@ -317,8 +320,8 @@ fun PantallaVuelos(
             dialogMode = dialogMode,
             viewModel = viewModel,
             onDismiss = { dialogMode = DialogMode.NONE },
-            ciudadOrigen = ciudadOrigen,
-            ciudadDestino = ciudadDestino,
+            ciudadOrigen = ciudadOrigenValid,
+            ciudadDestino = ciudadDestinoValid,
             fechaMillis = fechaMillis,
             horaMillis = horaMillis,
             nextId = nextId,

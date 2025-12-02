@@ -18,7 +18,11 @@ interface VuelosDao {
     @Query("SELECT * FROM vuelos WHERE idVuelo = :id")
     suspend fun getById(id: Int): VuelosEntity?
 
-    @Query("SELECT MAX(idVuelo) FROM vuelos")
+    @Query("""
+        SELECT seq 
+        FROM sqlite_sequence 
+        WHERE name = 'vuelos'
+    """)
     suspend fun getLastVueloId(): Int?
 
     @Query("DELETE FROM vuelos WHERE idVuelo = :id")

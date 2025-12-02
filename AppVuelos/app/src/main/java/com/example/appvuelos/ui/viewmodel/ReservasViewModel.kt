@@ -22,8 +22,8 @@ class ReservasViewModel(
         onComplete: (() -> Unit)? = null
     ) {
         viewModelScope.launch {
-            val vuelo = vuelosDao.getById(idVuelo) ?: return@launch
-            val pasajero = pasajerosDao.getById(idPasajero) ?: return@launch
+            vuelosDao.getById(idVuelo) ?: return@launch
+            pasajerosDao.getById(idPasajero) ?: return@launch
 
             val reserva = ReservasEntity(
                 idVuelo = idVuelo,
@@ -44,8 +44,8 @@ class ReservasViewModel(
         onComplete: (() -> Unit)? = null
     ) {
         viewModelScope.launch {
-            val vuelo = vuelosDao.getById(idVuelo) ?: return@launch
-            val pasajero = pasajerosDao.getById(idPasajero) ?: return@launch
+            vuelosDao.getById(idVuelo) ?: return@launch
+            pasajerosDao.getById(idPasajero) ?: return@launch
 
             reservasDao.update(
                 ReservasEntity(

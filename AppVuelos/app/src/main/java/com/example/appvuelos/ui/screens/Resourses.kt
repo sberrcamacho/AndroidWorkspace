@@ -331,13 +331,13 @@ fun Long.toFormattedShortHour(): String {
 }
 
 
-fun String.toValidNameOrUnknown(): String {
+fun String.toValidNameOrNull(): String? {
     val trimmed = this.trim()
 
     return if (trimmed.isNotEmpty() && trimmed.all { it.isLetter() }) {
         trimmed
     } else {
-        "Unknown"
+        null
     }
 }
 

@@ -4,24 +4,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appvuelos.data.dao.PasajerosDao
 import com.example.appvuelos.data.entities.PasajerosEntity
-import com.example.appvuelos.ui.screens.toValidNameOrUnknown
 import kotlinx.coroutines.launch
 
 class PasajerosViewModel(private val pasajerosDao: PasajerosDao) : ViewModel() {
 
     // Añadir pasajero con validación
     fun addPasajero(
-        nombre: String,
-        apellido: String,
+        nombre: String?,
+        apellido: String?,
         documento: Int?,
         telefono: Int?,
         onComplete: (() -> Unit)? = null
     ) {
         viewModelScope.launch {
-            if (documento != null && telefono != null) {
+            if (documento != null && telefono != null && nombre != null && apellido != null) {
                 val pasajeroEntity = PasajerosEntity(
-                    nombre = nombre.toValidNameOrUnknown(),
-                    apellido = apellido.toValidNameOrUnknown(),
+                    nombre = nombre,
+                    apellido = apellido,
                     documento = documento,
                     telefono = telefono
                 )
@@ -34,8 +33,8 @@ class PasajerosViewModel(private val pasajerosDao: PasajerosDao) : ViewModel() {
     // Actualizar pasajero con validación
     fun updatePasajero(
         id: Int,
-        nombre: String,
-        apellido: String,
+        nombre: String?,
+        apellido: String?,
         documento: Int?,
         telefono: Int?,
         onComplete: (() -> Unit)? = null
@@ -43,11 +42,11 @@ class PasajerosViewModel(private val pasajerosDao: PasajerosDao) : ViewModel() {
         getPasajeroById(id) { pasajero ->
             pasajero?.let {
                 viewModelScope.launch {
-                    if (documento != null && telefono != null) {
+                    if (documento != null && telefono != null && nombre != null && apellido != null ) {
                         val updated = PasajerosEntity(
                             idPasajero = it.idPasajero,
-                            nombre = nombre.toValidNameOrUnknown(),
-                            apellido = apellido.toValidNameOrUnknown(),
+                            nombre = nombre,
+                            apellido = apellido,
                             documento = documento,
                             telefono = telefono
                         )
