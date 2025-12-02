@@ -62,8 +62,6 @@ fun PantallaPrincipal(
                 text = R.string.entrar_boton,
                 onClick = { to(1) },
                 fontSize = 32.sp,
-                containerColor = DarkRed,
-                contentColor = White,
                 modifier = modifier
             )
 

@@ -75,9 +75,9 @@ import java.util.Locale
 fun BotonCustomizable(
     @StringRes text: Int,
     onClick: () -> Unit,
-    fontSize: TextUnit,
-    contentColor: Color,
-    containerColor: Color,
+    fontSize: TextUnit = 24.sp,
+    containerColor: Color = DarkRed,
+    contentColor: Color = White,
     modifier: Modifier = Modifier
 ) {
     Button(
@@ -173,8 +173,6 @@ fun AbrirDatePicker(
     val dataPickerState = rememberDatePickerState()
 
     val fontSize = 14.sp
-    val contentColor = White
-    val containerColor = DarkRed
 
     DatePickerDialog(
         onDismissRequest = onDismiss,
@@ -188,18 +186,14 @@ fun AbrirDatePicker(
                     }
                     onDismiss()
                 },
-                fontSize = fontSize,
-                contentColor = contentColor,
-                containerColor = containerColor
+                fontSize = fontSize
             )
         },
         dismissButton = {
             BotonCustomizable(
                 text = R.string.cancelar_boton_datapicker,
                 onClick = { onDismiss() },
-                fontSize = fontSize,
-                contentColor = contentColor,
-                containerColor = containerColor
+                fontSize = fontSize
             )
         }
     ) {
@@ -235,9 +229,6 @@ fun AbrirTimePicker(
     )
     
     val fontSize = 14.sp
-    val contentColor = White
-    val containerColor = DarkRed
-
 
     TimePickerDialog(
         onDismissRequest = onDismiss,
@@ -257,9 +248,7 @@ fun AbrirTimePicker(
                         hourSelected(millis)
                         onDismiss()
                     },
-                    fontSize = fontSize,
-                    contentColor = contentColor,
-                    containerColor = containerColor
+                    fontSize = fontSize
                 )
         },
         dismissButton = {
@@ -267,8 +256,6 @@ fun AbrirTimePicker(
                 text = R.string.cancelar_boton_datapicker,
                 onClick = { onDismiss() },
                 fontSize = fontSize,
-                contentColor = contentColor,
-                containerColor = containerColor,
                 modifier = Modifier.padding(end = 10.dp)
             )
         },
@@ -287,11 +274,41 @@ fun AbrirTimePicker(
     }
 }
 
+@Composable
+fun CampoID(
+    label: String,
+    icon: Int,
+    modifier: Modifier = Modifier
+) {
+    // Colores iguales a tus OutlinedTextField
+    val colors = TextFieldDefaults.colors(
+        unfocusedContainerColor = Color(0xFFE5E5E5),
+        focusedContainerColor = Color(0xFFE5E5E5),
+        disabledContainerColor = Color(0xFFE5E5E5),
+        disabledTextColor = Color.Black,
+    )
 
+    OutlinedTextField(
+        value = label,
+        onValueChange = {},
+        readOnly = true,
+        enabled = false,
+        leadingIcon = { Icon(painterResource(icon), null, modifier = Modifier.scale(0.9F)) },
+        placeholder = null,
+        shape = RoundedCornerShape(24.dp),
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            color = Color.Black
+        ),
+        colors = colors,
+        modifier = modifier.height(50.dp)
+    )
+}
 
 fun Long.toFormattedDateString(): String {
+    // Interpret the millis as a UTC date (how DatePicker provides it)
     val localDate = Instant.ofEpochMilli(this)
-        .atZone(ZoneId.systemDefault())
+        .atZone(ZoneId.of("UTC"))
         .toLocalDate()
 
     val formatter = DateTimeFormatter.ofPattern(
@@ -302,7 +319,6 @@ fun Long.toFormattedDateString(): String {
     val formatted = localDate.format(formatter)
     return formatted.replaceFirstChar { it.uppercase() }
 }
-
 fun Long.toFormattedHour(): String {
     val time = Instant.ofEpochMilli(this)
         .atZone(ZoneId.systemDefault())
@@ -342,36 +358,6 @@ fun String.toValidNameOrNull(): String? {
 }
 
 
-@Composable
-fun CampoID(
-    label: String,
-    icon: Int,
-    modifier: Modifier = Modifier
-) {
-    // Colores iguales a tus OutlinedTextField
-    val colors = TextFieldDefaults.colors(
-        unfocusedContainerColor = Color(0xFFE5E5E5),
-        focusedContainerColor = Color(0xFFE5E5E5),
-        disabledContainerColor = Color(0xFFE5E5E5),
-        disabledTextColor = Color.Black,
-    )
-
-    OutlinedTextField(
-        value = label,
-        onValueChange = {},
-        readOnly = true,
-        enabled = false,
-        leadingIcon = { Icon(painterResource(icon), null, modifier = Modifier.scale(0.9F)) },
-        placeholder = null,
-        shape = RoundedCornerShape(24.dp),
-        textStyle = TextStyle(
-            fontSize = 16.sp,
-            color = Color.Black
-        ),
-        colors = colors,
-        modifier = modifier.height(50.dp)
-    )
-}
 
 
 

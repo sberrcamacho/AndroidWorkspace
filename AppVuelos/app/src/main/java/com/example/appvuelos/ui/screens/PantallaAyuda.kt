@@ -43,7 +43,7 @@ fun PantallaAyuda(
             text = "Ayuda y Guía de Uso",
             style = MaterialTheme.typography.headlineMedium.copy(
                 color = DarkRed,
-                fontSize = 30.sp,
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier

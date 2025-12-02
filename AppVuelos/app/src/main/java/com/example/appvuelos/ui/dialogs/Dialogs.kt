@@ -384,8 +384,8 @@ private fun DialogDeleteAll(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Eliminar todos los vuelos") },
-        text = { Text("¿Estás seguro de eliminar todos los vuelos?") },
+        title = { Text("Eliminar todos los datos") },
+        text = { Text("¿Estás seguro de eliminar todos los datos?") },
         confirmButton = {
             BotonCustomizable(
                 text = R.string.confirmar_boton_datapicker,

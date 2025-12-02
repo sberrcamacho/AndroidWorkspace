@@ -36,12 +36,9 @@ import com.example.appvuelos.ui.theme.DarkRed
 import com.example.appvuelos.ui.theme.White
 import com.example.appvuelos.ui.viewmodel.PasajerosViewModel
 
-
-
 @Composable
 fun PantallaPasajeros(
-    modifier: Modifier = Modifier,
-    toRegresar: (Int) -> Unit
+    modifier: Modifier = Modifier, toRegresar: (Int) -> Unit
 ) {
     // Conexión directa al DAO
     val viewModel = remember { PasajerosViewModel(RoomApplication.db.pasajerosDao()) }
@@ -86,23 +83,20 @@ fun PantallaPasajeros(
         Spacer(modifier = modifier.height(30.dp))
 
         BotonRegresar(
-            toRegresar = { toRegresar(1) },
-            modifier = Modifier.align(Alignment.Start).padding(bottom = 20.dp)
+            toRegresar = { toRegresar(it) },
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(bottom = 20.dp)
         )
 
         Text(
-            text = "Gestión de Pasajeros",
-            style = MaterialTheme.typography.displaySmall.copy(
-                color = DarkRed,
-                fontWeight = FontWeight.Bold
-            ),
-            modifier = Modifier.align(Alignment.Start)
+            text = "Gestión de Pasajeros", style = MaterialTheme.typography.displaySmall.copy(
+                color = DarkRed, fontWeight = FontWeight.Bold, fontSize = 31.sp
+            ), modifier = Modifier.align(Alignment.Start)
         )
 
         Text(
-            text = "En esta sección podrá registrar, consultar, actualizar y eliminar la información de los pasajeros vinculados a sus vuelos. \n" +
-                    "Cada registro debe contener los datos básicos de identificación y contacto, garantizando la correcta administración de las reservas. \n" +
-                    "El sistema valida automáticamente la información ingresada para asegurar la integridad de la base de datos y facilitar la gestión de sus operaciones.",
+            text = "En esta sección podrá registrar, consultar, actualizar y eliminar la información de los pasajeros vinculados a sus vuelos. \n" + "Cada registro debe contener los datos básicos de identificación y contacto, garantizando la correcta administración de las reservas. \n" + "El sistema valida automáticamente la información ingresada para asegurar la integridad de la base de datos y facilitar la gestión de sus operaciones.",
             style = MaterialTheme.typography.bodyLarge.copy(),
             modifier = Modifier
                 .align(Alignment.Start)
@@ -112,14 +106,13 @@ fun PantallaPasajeros(
         Spacer(modifier = Modifier.height(40.dp))
 
         CampoID(
-            label = stringResource(R.string.id_vuelos_text,nextId),
+            label = stringResource(R.string.id_vuelos_text, nextId),
             icon = R.drawable.id_card_48dp_ffffff_fill0_wght400_grad0_opsz48,
             modifier = Modifier
                 .align(Alignment.Start)
                 .fillMaxWidth(0.5F)
                 .padding(bottom = 20.dp, start = 20.dp)
         )
-
 
         Column(
             verticalArrangement = Arrangement.spacedBy(14.dp)
@@ -137,7 +130,10 @@ fun PantallaPasajeros(
 
             EntradaDeTexto(
                 value = nombreInput,
-                onValueChange = { nombreInput = it; nombreError = it.isBlank() || !it.all { char -> char.isLetter() } },
+                onValueChange = {
+                    nombreInput = it; nombreError =
+                    it.isBlank() || !it.all { char -> char.isLetter() }
+                },
                 label = R.string.nombre_label,
                 icon = R.drawable.person_48dp_ffffff_fill0_wght400_grad0_opsz48,
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
@@ -151,7 +147,10 @@ fun PantallaPasajeros(
 
             EntradaDeTexto(
                 value = apellidoInput,
-                onValueChange = { apellidoInput = it; apellidoError = it.isBlank() || !it.all { char -> char.isLetter() } },
+                onValueChange = {
+                    apellidoInput = it; apellidoError =
+                    it.isBlank() || !it.all { char -> char.isLetter() }
+                },
                 label = R.string.apellido_label,
                 icon = R.drawable.group_48dp_ffffff_fill0_wght400_grad0_opsz48,
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
@@ -165,7 +164,10 @@ fun PantallaPasajeros(
 
             EntradaDeTexto(
                 value = documentoInput,
-                onValueChange = { documentoInput = it; documentoError = it.isBlank() || !it.all { char -> char.isDigit() } },
+                onValueChange = {
+                    documentoInput = it; documentoError =
+                    it.isBlank() || !it.all { char -> char.isDigit() }
+                },
                 label = R.string.documento_label,
                 icon = R.drawable.id_card_48dp_ffffff_fill0_wght400_grad0_opsz48,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Next),
@@ -178,7 +180,10 @@ fun PantallaPasajeros(
             )
             EntradaDeTexto(
                 value = telefonoInput,
-                onValueChange = { telefonoInput = it; telefonoError = it.isBlank() || !it.all { char -> char.isDigit() } },
+                onValueChange = {
+                    telefonoInput = it; telefonoError =
+                    it.isBlank() || !it.all { char -> char.isDigit() }
+                },
                 label = R.string.telefono_label,
                 icon = R.drawable.call_48dp_ffffff_fill1_wght400_grad0_opsz48,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
@@ -202,7 +207,6 @@ fun PantallaPasajeros(
                 .fillMaxWidth()
                 .height(58.dp)
 
-            val fontSize = 24.sp
 
             BotonCustomizable(
                 text = R.string.agregar_pasajero,
@@ -220,36 +224,24 @@ fun PantallaPasajeros(
                         telefonoInput = ""
                     }
                 },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = modifier
             )
 
             BotonCustomizable(
                 text = R.string.buscar_pasajero,
-                onClick = {dialogMode = DialogMode.BUSCAR },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
+                onClick = { dialogMode = DialogMode.BUSCAR },
                 modifier = modifier
             )
 
             BotonCustomizable(
                 text = R.string.actualizar_pasajero,
                 onClick = { dialogMode = DialogMode.ACTUALIZAR },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = modifier
             )
 
             BotonCustomizable(
                 text = R.string.eliminar_pasajero,
                 onClick = { dialogMode = DialogMode.ELIMINAR },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = modifier
             )
 
@@ -258,18 +250,12 @@ fun PantallaPasajeros(
             BotonCustomizable(
                 text = R.string.mostrar_todos_pasajeros,
                 onClick = { dialogMode = DialogMode.MOSTRAR_TODOS },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = modifier
             )
 
             BotonCustomizable(
                 text = R.string.eliminar_todos_pasajeros,
                 onClick = { dialogMode = DialogMode.ELIMINAR_TODOS },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = modifier
             )
         }

@@ -85,7 +85,7 @@ fun PantallaReservas(
         Spacer(modifier = modifier.height(30.dp))
 
         BotonRegresar(
-            toRegresar = { toRegresar(1) },
+            toRegresar = { toRegresar(it) },
             modifier = Modifier.align(Alignment.Start).padding(bottom = 20.dp)
         )
 
@@ -93,7 +93,8 @@ fun PantallaReservas(
             text = "Gestión de Reservas",
             style = MaterialTheme.typography.displaySmall.copy(
                 color = DarkRed,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontSize = 33.sp
             ),
             modifier = Modifier.align(Alignment.Start)
         )
@@ -193,7 +194,6 @@ fun PantallaReservas(
             val btnModifier = Modifier
                 .fillMaxWidth()
                 .height(58.dp)
-            val btnFontSize = 24.sp
 
             // ADD
             BotonCustomizable(
@@ -218,9 +218,6 @@ fun PantallaReservas(
                         }
                     }
                 },
-                fontSize = btnFontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
@@ -228,9 +225,6 @@ fun PantallaReservas(
             BotonCustomizable(
                 text = R.string.leer_reserva,
                 onClick = { dialogMode = DialogMode.BUSCAR },
-                fontSize = btnFontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
@@ -238,9 +232,6 @@ fun PantallaReservas(
             BotonCustomizable(
                 text = R.string.actualizar_reserva,
                 onClick = { dialogMode = DialogMode.ACTUALIZAR },
-                fontSize = btnFontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
@@ -248,9 +239,6 @@ fun PantallaReservas(
             BotonCustomizable(
                 text = R.string.eliminar_reserva,
                 onClick = { dialogMode = DialogMode.ELIMINAR },
-                fontSize = btnFontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
@@ -259,18 +247,12 @@ fun PantallaReservas(
             BotonCustomizable(
                 text = R.string.mostrar_todos_reservas,
                 onClick = { dialogMode = DialogMode.MOSTRAR_TODOS },
-                fontSize = btnFontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
             BotonCustomizable(
                 text = R.string.eliminar_todos_reservas,
                 onClick = { dialogMode = DialogMode.ELIMINAR_TODOS },
-                fontSize = btnFontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
         }

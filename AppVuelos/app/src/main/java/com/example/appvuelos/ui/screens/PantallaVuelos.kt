@@ -89,7 +89,7 @@ fun PantallaVuelos(
         Spacer(modifier = Modifier.height(30.dp))
 
         BotonRegresar(
-            toRegresar = { toRegresar(1) },
+            toRegresar = { toRegresar(it) },
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(bottom = 20.dp)
@@ -241,7 +241,6 @@ fun PantallaVuelos(
                 .fillMaxWidth()
                 .height(58.dp)
 
-            val fontSize = 24.sp
 
             BotonCustomizable(
                 text = R.string.agregar_vuelo_boton,
@@ -259,36 +258,24 @@ fun PantallaVuelos(
                         refreshNextId()
                     }
                 },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
             BotonCustomizable(
                 text = R.string.traer_vuelo_boton,
                 onClick = { dialogMode = DialogMode.BUSCAR },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
             BotonCustomizable(
                 text = R.string.actualizar_vuelo_boton,
                 onClick = { dialogMode = DialogMode.ACTUALIZAR },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
             BotonCustomizable(
                 text = R.string.eliminar_vuelo_boton,
                 onClick = { dialogMode = DialogMode.ELIMINAR },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
@@ -297,18 +284,12 @@ fun PantallaVuelos(
             BotonCustomizable(
                 text = R.string.mostrar_vuelos_boton,
                 onClick = { dialogMode = DialogMode.MOSTRAR_TODOS },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
 
             BotonCustomizable(
                 text = R.string.eliminar_todos_boton,
                 onClick = { dialogMode = DialogMode.ELIMINAR_TODOS },
-                fontSize = fontSize,
-                contentColor = White,
-                containerColor = DarkRed,
                 modifier = btnModifier
             )
         }
