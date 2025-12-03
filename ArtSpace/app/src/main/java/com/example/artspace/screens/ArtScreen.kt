@@ -12,13 +12,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,35 +29,40 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.artspace.R
 import com.example.artspace.ui.theme.ArtSpaceTheme
 import com.example.artspace.ui.theme.Periwinkle
+
 
 @Composable
 fun ArtScreen(
     id: Int,
     @DrawableRes image: Int,
-    @StringRes  title: Int,
+    @StringRes title: Int,
     @StringRes author: Int,
-    @StringRes  year: Int,
+    @StringRes year: Int,
     onPrevious: (Int) -> Unit,
-    onNext: (Int) -> Unit
+    onNext: (Int) -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(18.dp)
+            .padding(16.dp)
             .wrapContentSize(Alignment.BottomCenter)
     ) {
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.weight(1F/3F))
 
         Box(
             modifier = Modifier
+                .aspectRatio(7F / 9F)
+                .weight(12F)
                 .background(Color.White)
-                .shadow(elevation = 8.dp)
-                .padding(36.dp)
-                .aspectRatio(4F / 5F)
+                .shadow(elevation = 3.dp)
+                .padding(40.dp)
         ) {
             Image(
                 painter = painterResource(image),
@@ -66,15 +71,17 @@ fun ArtScreen(
             )
         }
 
-        Spacer(Modifier.height(80.dp))
+        Spacer(Modifier.weight(1F/2F))
 
         Box(
             modifier = Modifier
                 .background(Periwinkle)
-                .fillMaxWidth()
+
         ) {
             Column(
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier
+                    .padding(24.dp)
+                    .wrapContentSize(Alignment.CenterStart)
             ) {
                 Text(
                     text = stringResource(title),
@@ -95,48 +102,30 @@ fun ArtScreen(
                 }
             }
         }
-
-        Spacer(Modifier.height(28.dp))
+        Spacer(Modifier.weight(1F))
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = 16.dp, end = 16.dp, bottom = 6.dp
+                    start = 16.dp, end = 16.dp
                 )
         ) {
             Button(
-                onClick = { onPrevious(id-1) },
-                modifier = Modifier.weight(1F)
+                onClick = { onPrevious(id - 1) },
+                modifier = Modifier.width(138.dp)
             ) {
                 Text(text = "Previous")
             }
 
-            Spacer(Modifier.width(44.dp))
 
             Button(
-                onClick = { onNext(id+1) },
-                modifier = Modifier.weight(1F)
+                onClick = { onNext(id + 1) },
+                modifier = Modifier.width(138.dp)
             ) {
                 Text(text = "Next")
             }
-        }
-    }
-
-}
-
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ArtSpaceTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
         }
     }
 }

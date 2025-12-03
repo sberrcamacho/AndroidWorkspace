@@ -15,4 +15,10 @@
     <string name="the_scream_title">The Scream</string>
     <string name="the_scream_author">Edvard Munch</string>
     <string name="the_scream_year">1893</string>
+
+    # Mona lisa
+    <string name="mona_lisa_title">Mona Lisa (La Gioconda)</string>
+    <string name="mona_lisa_author">Leonardo da Vinci</string>
+    <string name="mona_lisa_year">1503</string>
+
 </resources>
